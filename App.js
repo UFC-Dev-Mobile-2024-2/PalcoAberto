@@ -13,6 +13,10 @@ export default function App() {
   if (!isLoggedIn) {
     return (
       <View style={styles.loginContainer}>
+        <Image
+                source={require('./assets/logoBlack.png')} // Mock da logo
+                style={styles.logo}
+              />
         <Text style={styles.loginTitle}>Login</Text>
         <TextInput
           style={styles.input}
@@ -70,10 +74,10 @@ function ArtistProfile() {
     },
   ];
 
-  const events = [
+  const proposals = [
     {
       id: 1,
-      type: 'event',
+      type: 'proposal',
       image: require('./assets/image.png'),
       description: 'Festival de Inverno',
       details: 'Não perca o Festival de Inverno no próximo mês! Será um evento épico com várias atrações.',
@@ -81,7 +85,7 @@ function ArtistProfile() {
     },
     {
       id: 2,
-      type: 'event',
+      type: 'proposal',
       image: require('./assets/image.png'),
       description: 'Show Beneficente',
       details: 'Participe do show beneficente para ajudar crianças carentes.',
@@ -89,13 +93,68 @@ function ArtistProfile() {
     },
     {
       id: 3,
-      type: 'event',
+      type: 'proposal',
       image: require('./assets/image.png'),
       description: 'Lançamento do Novo Álbum',
       details: 'Venha para o lançamento do novo álbum "Vibração Cósmica".',
       tags: ['Duo', 'Reggae'], // Tags de gênero e tipo de artista
     },
   ];
+
+  // Dados do perfil do produtor de eventos (mock)
+  const profileData = {
+    name: 'Carlos Eventos',
+    bio: 'Produtor de eventos com mais de 10 anos de experiência, especializado em festivais e shows ao vivo.',
+    profileImage: require('./assets/image.png'), // Mock da imagem do perfil
+    socialLinks: [
+      { id: 1, icon: '🌐', label: 'Site' },
+      { id: 2, icon: '📸', label: 'Instagram' },
+      { id: 3, icon: '📧', label: 'Email' },
+    ],
+    events: [
+      {
+        id: 1,
+        title: 'Festival de Verão 2023',
+        date: '15/12/2023',
+        location: 'São Paulo, SP',
+        image: require('./assets/image.png'),
+      },
+      {
+        id: 2,
+        title: 'Noite Eletrônica',
+        date: '20/01/2024',
+        location: 'Rio de Janeiro, RJ',
+        image: require('./assets/image.png'),
+      },
+      {
+        id: 3,
+        title: 'Show Beneficente',
+        date: '05/02/2024',
+        location: 'Belo Horizonte, MG',
+        image: require('./assets/image.png'),
+      },
+    ],
+    reviews: [
+      {
+        id: 1,
+        author: 'João Silva',
+        rating: 5,
+        comment: 'Evento incrível! Tudo foi muito bem organizado.',
+      },
+      {
+        id: 2,
+        author: 'Maria Souza',
+        rating: 4,
+        comment: 'Adorei o festival, mas a fila para o banheiro estava longa.',
+      },
+      {
+        id: 3,
+        author: 'Pedro Oliveira',
+        rating: 5,
+        comment: 'Melhor evento que já fui! Parabéns à equipe.',
+      },
+    ],
+  };
 
   // Função para abrir o modal com os detalhes do post
   const openPostDetails = (post) => {
@@ -120,18 +179,24 @@ function ArtistProfile() {
       case 'Home':
         return (
           <ScrollView style={styles.container}>
-            {/* Barra de Busca */}
-            <View style={styles.searchContainer}>
-              <TextInput
-                style={styles.searchInput}
-                placeholder="Buscar posts ou eventos..."
-                placeholderTextColor="#999"
-                value={searchQuery}
-                onChangeText={setSearchQuery}
+            {/* Menu Superior */}
+            <View style={styles.topMenu}>
+              <Image
+                source={require('./assets/logoBlack.png')} // Mock da logo
+                style={styles.logo}
               />
-              <TouchableOpacity style={styles.searchButton} onPress={filterPosts}>
-                <Text style={styles.searchButtonText}>🔍</Text>
-              </TouchableOpacity>
+              <View style={styles.searchContainer}>
+                <TextInput
+                  style={styles.searchInput}
+                  placeholder="Buscar posts ou eventos..."
+                  placeholderTextColor="#999"
+                  value={searchQuery}
+                  onChangeText={setSearchQuery}
+                />
+                <TouchableOpacity style={styles.searchButton} onPress={filterPosts}>
+                  <Text style={styles.searchButtonText}>🔍</Text>
+                </TouchableOpacity>
+              </View>
             </View>
 
             {/* Seção de Posts em Destaque */}
@@ -167,20 +232,118 @@ function ArtistProfile() {
             {/* Seção de Eventos */}
             <Text style={styles.sectionTitle}>Eventos</Text>
             <View style={styles.eventsContainer}>
-              {events.map((event) => (
+              {posts.map((post) => (
                 <TouchableOpacity
-                  key={event.id}
+                  key={post.id}
                   style={styles.eventCard}
-                  onPress={() => openPostDetails(event)}
+                  onPress={() => openPostDetails(post)}
                 >
                   <Image
                     style={styles.eventImage}
-                    source={event.image}
+                    source={post.image}
                   />
-                  <Text style={styles.eventDescription}>{event.description}</Text>
+                  <Text style={styles.eventDescription}>{post.description}</Text>
                   {/* Tags no canto direito */}
                   <View style={styles.cardTags}>
-                    {event.tags.map((tag, index) => (
+                    {post.tags.map((tag, index) => (
+                      <View key={index} style={styles.tag}>
+                        <Text style={styles.tagText}>{tag}</Text>
+                      </View>
+                    ))}
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </ScrollView>
+        );
+      case 'Postagens':
+        return (
+          <ScrollView style={styles.container}>
+            {/* Menu Superior */}
+            <View style={styles.topMenu}>
+              <Image
+                source={require('./assets/logoBlack.png')} // Mock da logo
+                style={styles.logo}
+              />
+              <View style={styles.searchContainer}>
+                <TextInput
+                  style={styles.searchInput}
+                  placeholder="Buscar posts..."
+                  placeholderTextColor="#999"
+                  value={searchQuery}
+                  onChangeText={setSearchQuery}
+                />
+                <TouchableOpacity style={styles.searchButton} onPress={filterPosts}>
+                  <Text style={styles.searchButtonText}>🔍</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            {/* Lista de Postagens */}
+            <Text style={styles.sectionTitle}>Postagens</Text>
+            <View style={styles.postsContainer}>
+              {posts.map((post) => (
+                <TouchableOpacity
+                  key={post.id}
+                  style={styles.smallCard}
+                  onPress={() => openPostDetails(post)}
+                >
+                  <Image
+                    style={styles.smallCardImage}
+                    source={post.image}
+                  />
+                  <Text style={styles.smallCardDescription}>{post.description}</Text>
+                  <View style={styles.cardTags}>
+                    {post.tags.map((tag, index) => (
+                      <View key={index} style={styles.tag}>
+                        <Text style={styles.tagText}>{tag}</Text>
+                      </View>
+                    ))}
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </ScrollView>
+        );
+      case 'Propostas':
+        return (
+          <ScrollView style={styles.container}>
+            {/* Menu Superior */}
+            <View style={styles.topMenu}>
+              <Image
+                source={require('./assets/logoBlack.png')} // Mock da logo
+                style={styles.logo}
+              />
+              <View style={styles.searchContainer}>
+                <TextInput
+                  style={styles.searchInput}
+                  placeholder="Buscar propostas..."
+                  placeholderTextColor="#999"
+                  value={searchQuery}
+                  onChangeText={setSearchQuery}
+                />
+                <TouchableOpacity style={styles.searchButton} onPress={filterPosts}>
+                  <Text style={styles.searchButtonText}>🔍</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            {/* Lista de Propostas */}
+            <Text style={styles.sectionTitle}>Propostas</Text>
+            <View style={styles.proposalsContainer}>
+              {proposals.map((proposal) => (
+                <TouchableOpacity
+                  key={proposal.id}
+                  style={styles.largeCard}
+                  onPress={() => openPostDetails(proposal)}
+                >
+                  <Image
+                    style={styles.largeCardImage}
+                    source={proposal.image}
+                  />
+                  <Text style={styles.largeCardDescription}>{proposal.description}</Text>
+                  <View style={styles.cardTags}>
+                    {proposal.tags.map((tag, index) => (
                       <View key={index} style={styles.tag}>
                         <Text style={styles.tagText}>{tag}</Text>
                       </View>
@@ -194,81 +357,60 @@ function ArtistProfile() {
       case 'Perfil':
         return (
           <ScrollView style={styles.container}>
-            {/* Cabeçalho do Artista */}
-            <View style={styles.header}>
+            {/* Cabeçalho do Perfil */}
+            <View style={styles.profileHeader}>
               <Image
-                style={styles.artistImage}
-                source={require('./assets/image.png')} // Substitua pela imagem do artista
+                source={profileData.profileImage}
+                style={styles.profileImage}
               />
-              <Text style={styles.artistName}>Reggaezim do Cera</Text>
-              <Text style={styles.artistBio}>Artista de Rock/DJ com mais de 10 anos de experiência.</Text>
+              <Text style={styles.profileName}>{profileData.name}</Text>
+              <Text style={styles.profileBio}>{profileData.bio}</Text>
 
               {/* Redes Sociais */}
-              <View style={styles.socialLinks}>
-                <TouchableOpacity style={styles.socialButton}>
-                  <Text>🌐 Site</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.socialButton}>
-                  <Text>📸 Instagram</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.socialButton}>
-                  <Text>🎵 Spotify</Text>
-                </TouchableOpacity>
+              <View style={styles.socialLinksContainer}>
+                {profileData.socialLinks.map((link) => (
+                  <TouchableOpacity key={link.id} style={styles.socialLinkButton}>
+                    <Text style={styles.socialLinkIcon}>{link.icon}</Text>
+                    <Text style={styles.socialLinkLabel}>{link.label}</Text>
+                  </TouchableOpacity>
+                ))}
               </View>
             </View>
 
-            {/* Postagens do Artista */}
-            <Text style={styles.sectionTitle}>Postagens</Text>
-            <View style={styles.postsContainer}>
-              {posts.map((post) => (
+            {/* Seção de Eventos Criados */}
+            <Text style={styles.sectionTitle}>Eventos Criados</Text>
+            <View style={styles.eventsContainer}>
+              {profileData.events.map((event) => (
                 <TouchableOpacity
-                  key={post.id}
-                  style={styles.postCard}
-                  onPress={() => openPostDetails(post)}
+                  key={event.id}
+                  style={styles.eventCard}
+                  onPress={() => openPostDetails(event)}
                 >
                   <Image
-                    style={styles.postImage}
-                    source={post.image}
+                    source={event.image}
+                    style={styles.eventImage}
                   />
-                  <Text style={styles.postDescription}>{post.description}</Text>
-                  {/* Tags no canto direito */}
-                  <View style={styles.cardTags}>
-                    {post.tags.map((tag, index) => (
-                      <View key={index} style={styles.tag}>
-                        <Text style={styles.tagText}>{tag}</Text>
-                      </View>
-                    ))}
+                  <View style={styles.eventDetails}>
+                    <Text style={styles.eventTitle}>{event.title}</Text>
+                    <Text style={styles.eventDate}>{event.date}</Text>
+                    <Text style={styles.eventLocation}>{event.location}</Text>
                   </View>
                 </TouchableOpacity>
               ))}
             </View>
 
-            {/* Depoimentos */}
-            <Text style={styles.sectionTitle}>Depoimentos</Text>
-            <View style={styles.testimonialsContainer}>
-              {/* Depoimento 1 */}
-              <View style={styles.testimonialCard}>
-                <Text style={styles.testimonialText}>
-                  "O show foi incrível! Reggaezim do Cera arrasou!"
-                </Text>
-                <Text style={styles.testimonialAuthor}>- João Silva</Text>
-              </View>
-
-              {/* Depoimento 2 */}
-              <View style={styles.testimonialCard}>
-                <Text style={styles.testimonialText}>
-                  "Melhor experiência musical da minha vida!"
-                </Text>
-                <Text style={styles.testimonialAuthor}>- Maria Souza</Text>
-              </View>
-
-              {/* Depoimento 3 */}
-              <View style={styles.testimonialCard}>
-                <Text style={styles.testimonialText}>
-                  "Não vejo a hora do próximo show!"
-                </Text>
-                <Text style={styles.testimonialAuthor}>- Pedro Oliveira</Text>
-              </View>
+            {/* Seção de Avaliações */}
+            <Text style={styles.sectionTitle}>Avaliações</Text>
+            <View style={styles.reviewsContainer}>
+              {profileData.reviews.map((review) => (
+                <View key={review.id} style={styles.reviewCard}>
+                  <Text style={styles.reviewAuthor}>{review.author}</Text>
+                  <Text style={styles.reviewRating}>
+                    {'⭐'.repeat(review.rating)}
+                  </Text>
+                  <Text style={styles.reviewComment}>{review.comment}</Text>
+                </View>
+              ))}
             </View>
           </ScrollView>
         );
@@ -282,7 +424,7 @@ function ArtistProfile() {
       {/* Conteúdo principal */}
       {renderContent()}
 
-      {/* Modal para detalhes da postagem */}
+      {/* Modal para detalhes do evento */}
       <Modal
         visible={modalVisible}
         transparent={true}
@@ -294,10 +436,10 @@ function ArtistProfile() {
             {selectedPost && (
               <>
                 <Image
-                  style={styles.modalImage}
                   source={selectedPost.image}
+                  style={styles.modalImage}
                 />
-                <Text style={styles.modalDescription}>{selectedPost.description}</Text>
+                <Text style={styles.modalTitle}>{selectedPost.title || selectedPost.description}</Text>
                 <Text style={styles.modalDetails}>{selectedPost.details}</Text>
                 <TouchableOpacity style={styles.closeButton} onPress={closePostDetails}>
                   <Text style={styles.closeButtonText}>Fechar</Text>
@@ -314,13 +456,25 @@ function ArtistProfile() {
           style={styles.menuButton}
           onPress={() => setCurrentScreen('Home')}
         >
-          <Text style={currentScreen === 'Home' ? styles.menuButtonActive : styles.menuButtonText}>Home</Text>
+          <Text style={currentScreen === 'Home' ? styles.menuButtonActive : styles.menuButtonText}>🏠 Home</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => setCurrentScreen('Postagens')}
+        >
+          <Text style={currentScreen === 'Postagens' ? styles.menuButtonActive : styles.menuButtonText}>📄 Postagens</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => setCurrentScreen('Propostas')}
+        >
+          <Text style={currentScreen === 'Propostas' ? styles.menuButtonActive : styles.menuButtonText}>📋 Propostas</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.menuButton}
           onPress={() => setCurrentScreen('Perfil')}
         >
-          <Text style={currentScreen === 'Perfil' ? styles.menuButtonActive : styles.menuButtonText}>Perfil</Text>
+          <Text style={currentScreen === 'Perfil' ? styles.menuButtonActive : styles.menuButtonText}>👤 Perfil</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -376,13 +530,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
     padding: 16,
   },
+  topMenu: {
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  logo: {
+    width: '100%',
+    height: 100,
+    marginBottom: 16,
+  },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#fff',
     borderRadius: 10,
     paddingHorizontal: 10,
-    marginBottom: 16,
+    width: '100%',
     elevation: 3,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -450,7 +613,70 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 150,
   },
-  eventDescription: {
+  eventDetails: {
+    padding: 16,
+  },
+  eventTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 8,
+  },
+  eventDate: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 4,
+  },
+  eventLocation: {
+    fontSize: 14,
+    color: '#666',
+  },
+  postsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  smallCard: {
+    width: '48%',
+    borderRadius: 10,
+    backgroundColor: '#fff',
+    overflow: 'hidden',
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    marginBottom: 16,
+  },
+  smallCardImage: {
+    width: '100%',
+    height: 100,
+  },
+  smallCardDescription: {
+    padding: 8,
+    fontSize: 14,
+    color: '#333',
+  },
+  proposalsContainer: {
+    marginBottom: 16,
+  },
+  largeCard: {
+    width: '100%',
+    borderRadius: 10,
+    backgroundColor: '#fff',
+    overflow: 'hidden',
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    marginBottom: 16,
+  },
+  largeCardImage: {
+    width: '100%',
+    height: 200,
+  },
+  largeCardDescription: {
     padding: 8,
     fontSize: 14,
     color: '#333',
@@ -473,10 +699,47 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
-  testimonialsContainer: {
+  profileHeader: {
+    alignItems: 'center',
     marginBottom: 24,
   },
-  testimonialCard: {
+  profileImage: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    marginBottom: 16,
+  },
+  profileName: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 8,
+  },
+  profileBio: {
+    fontSize: 14,
+    color: '#666',
+    textAlign: 'center',
+    marginBottom: 16,
+  },
+  socialLinksContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  socialLinkButton: {
+    alignItems: 'center',
+    marginHorizontal: 8,
+  },
+  socialLinkIcon: {
+    fontSize: 24,
+  },
+  socialLinkLabel: {
+    fontSize: 12,
+    color: '#666',
+  },
+  reviewsContainer: {
+    marginBottom: 24,
+  },
+  reviewCard: {
     backgroundColor: '#fff',
     borderRadius: 10,
     padding: 16,
@@ -487,40 +750,21 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
-  testimonialText: {
-    fontSize: 14,
-    color: '#333',
-    fontStyle: 'italic',
-  },
-  testimonialAuthor: {
-    fontSize: 12,
-    color: '#666',
-    marginTop: 8,
-    textAlign: 'right',
-  },
-  bottomMenu: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    borderTopWidth: 1,
-    borderTopColor: '#e0e0e0',
-    paddingVertical: 10,
-  },
-  menuButton: {
-    padding: 10,
-  },
-  menuButtonText: {
+  reviewAuthor: {
     fontSize: 16,
-    color: '#666',
-  },
-  menuButtonActive: {
-    fontSize: 16,
-    color: '#6200ee',
     fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 8,
   },
-
-  // Estilos do modal
+  reviewRating: {
+    fontSize: 14,
+    color: '#FFD700',
+    marginBottom: 8,
+  },
+  reviewComment: {
+    fontSize: 14,
+    color: '#666',
+  },
   modalOverlay: {
     flex: 1,
     justifyContent: 'center',
@@ -540,7 +784,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 16,
   },
-  modalDescription: {
+  modalTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
@@ -556,10 +800,32 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#6200ee',
     borderRadius: 5,
+    marginTop: 16,
   },
   closeButtonText: {
     color: '#fff',
     fontSize: 16,
+    fontWeight: 'bold',
+  },
+  bottomMenu: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderTopColor: '#e0e0e0',
+    paddingVertical: 10,
+  },
+  menuButton: {
+    alignItems: 'center',
+  },
+  menuButtonText: {
+    fontSize: 14,
+    color: '#666',
+  },
+  menuButtonActive: {
+    fontSize: 14,
+    color: '#6200ee',
     fontWeight: 'bold',
   },
 });
