@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Text, StyleSheet, View, ScrollView, Image, TouchableOpacity, TextInput, Modal } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons'; // Importando ícones do Material Design
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Estado para controlar se o usuário está logado
@@ -14,9 +15,9 @@ export default function App() {
     return (
       <View style={styles.loginContainer}>
         <Image
-                source={require('./assets/logoBlack.png')} // Mock da logo
-                style={styles.logo}
-              />
+          source={require('./assets/logoBlack.png')} // Mock da logo
+          style={styles.logo}
+        />
         <Text style={styles.loginTitle}>Login</Text>
         <TextInput
           style={styles.input}
@@ -106,18 +107,19 @@ function ArtistProfile() {
     name: 'Carlos Eventos',
     bio: 'Produtor de eventos com mais de 10 anos de experiência, especializado em festivais e shows ao vivo.',
     profileImage: require('./assets/image.png'), // Mock da imagem do perfil
-    socialLinks: [
-      { id: 1, icon: '🌐', label: 'Site' },
-      { id: 2, icon: '📸', label: 'Instagram' },
-      { id: 3, icon: '📧', label: 'Email' },
-    ],
-    events: [
+     socialLinks: [
+    { id: 1, icon: 'language', label: 'Site' }, // Ícone do Material Design para Site
+    { id: 2, icon: 'camera-alt', label: 'Instagram' }, // Ícone do Material Design para Instagram
+    { id: 3, icon: 'email', label: 'Email' }, // Ícone do Material Design para Email
+  ],
+events: [
       {
         id: 1,
         title: 'Festival de Verão 2023',
         date: '15/12/2023',
-        location: 'São Paulo, SP',
+        location: 'São Paulo, SP', 
         image: require('./assets/image.png'),
+        tags: ['Solo', 'Reggae'], // Tags de gênero e tipo de artista
       },
       {
         id: 2,
@@ -125,6 +127,7 @@ function ArtistProfile() {
         date: '20/01/2024',
         location: 'Rio de Janeiro, RJ',
         image: require('./assets/image.png'),
+        tags: ['Solo', 'Reggae'], // Tags de gênero e tipo de artista
       },
       {
         id: 3,
@@ -132,6 +135,7 @@ function ArtistProfile() {
         date: '05/02/2024',
         location: 'Belo Horizonte, MG',
         image: require('./assets/image.png'),
+        tags: ['Solo', 'Reggae'], // Tags de gênero e tipo de artista
       },
     ],
     reviews: [
@@ -170,7 +174,7 @@ function ArtistProfile() {
 
   // Função mockada para filtrar posts (simulação)
   const filterPosts = () => {
-    alert(`Filtrando posts com a busca: "${searchQuery}"`);
+    alert();
   };
 
   // Função para renderizar o conteúdo com base na tela atual
@@ -194,13 +198,18 @@ function ArtistProfile() {
                   onChangeText={setSearchQuery}
                 />
                 <TouchableOpacity style={styles.searchButton} onPress={filterPosts}>
-                  <Text style={styles.searchButtonText}>🔍</Text>
+                  <Icon
+      name="search" // Ícone do Material Design para lupa
+      size={24} // Tamanho do ícone
+      color="#6200ee" // Cor do ícone (roxo)
+    />
                 </TouchableOpacity>
               </View>
             </View>
 
             {/* Seção de Posts em Destaque */}
             <Text style={styles.sectionTitle}>Posts em Destaque</Text>
+            
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
@@ -231,6 +240,45 @@ function ArtistProfile() {
 
             {/* Seção de Eventos */}
             <Text style={styles.sectionTitle}>Eventos</Text>
+            
+ 
+        
+        <View style={styles.eventsContainer}>
+              {profileData.events.map((event) => (
+                <TouchableOpacity
+                  key={event.id}
+                  style={styles.eventCard}
+                  onPress={() => openPostDetails(event)}
+                >
+                  <Image
+                    source={event.image}
+                    style={styles.eventImage}
+                  />
+                  
+                  <View style={styles.eventDetails}>
+                  
+                    <Text style={styles.eventTitle}>{event.title}</Text>
+                    <Text style={styles.eventDate}>{event.date}</Text>
+                    <Text style={styles.eventLocation}>{event.location}</Text>
+                  
+                    {/* CHICO */}
+                   {/* Tags no canto direito */}
+                  <View style={styles.cardTags2}>
+                    {event.tags.map((tag, index) => (
+                      <View key={index} style={styles.tag}>
+                        <Text style={styles.tagText}>{tag}</Text>
+                      </View>
+                    ))}
+                  
+                  </View>
+                  </View>
+                </TouchableOpacity>
+
+                
+              ))}
+            </View>
+            
+            
             <View style={styles.eventsContainer}>
               {posts.map((post) => (
                 <TouchableOpacity
@@ -274,7 +322,11 @@ function ArtistProfile() {
                   onChangeText={setSearchQuery}
                 />
                 <TouchableOpacity style={styles.searchButton} onPress={filterPosts}>
-                  <Text style={styles.searchButtonText}>🔍</Text>
+                  <Icon
+      name="search" // Ícone do Material Design para lupa
+      size={24} // Tamanho do ícone
+      color="#6200ee" // Cor do ícone (roxo)
+    />
                 </TouchableOpacity>
               </View>
             </View>
@@ -323,7 +375,11 @@ function ArtistProfile() {
                   onChangeText={setSearchQuery}
                 />
                 <TouchableOpacity style={styles.searchButton} onPress={filterPosts}>
-                  <Text style={styles.searchButtonText}>🔍</Text>
+                  <Icon
+      name="search" // Ícone do Material Design para lupa
+      size={24} // Tamanho do ícone
+      color="#6200ee" // Cor do ícone (roxo)
+    />
                 </TouchableOpacity>
               </View>
             </View>
@@ -370,7 +426,11 @@ function ArtistProfile() {
               <View style={styles.socialLinksContainer}>
                 {profileData.socialLinks.map((link) => (
                   <TouchableOpacity key={link.id} style={styles.socialLinkButton}>
-                    <Text style={styles.socialLinkIcon}>{link.icon}</Text>
+                    <Icon
+        name={link.icon} // Usando o ícone do Material Design
+        size={24} // Tamanho do ícone
+        color="#6200ee" // Cor do ícone (roxo)
+      />
                     <Text style={styles.socialLinkLabel}>{link.label}</Text>
                   </TouchableOpacity>
                 ))}
@@ -450,31 +510,62 @@ function ArtistProfile() {
         </View>
       </Modal>
 
-      {/* Menu Inferior */}
+      {/* Barra de Menu Inferior com Ícones do Material Design */}
       <View style={styles.bottomMenu}>
         <TouchableOpacity
           style={styles.menuButton}
           onPress={() => setCurrentScreen('Home')}
         >
-          <Text style={currentScreen === 'Home' ? styles.menuButtonActive : styles.menuButtonText}>🏠 Home</Text>
+          <Icon
+            name="home"
+            size={24}
+            color={currentScreen === 'Home' ? '#6200ee' : '#666'}
+          />
+          <Text style={currentScreen === 'Home' ? styles.menuButtonActive : styles.menuButtonText}>
+            Home
+          </Text>
         </TouchableOpacity>
+
         <TouchableOpacity
           style={styles.menuButton}
           onPress={() => setCurrentScreen('Postagens')}
         >
-          <Text style={currentScreen === 'Postagens' ? styles.menuButtonActive : styles.menuButtonText}>📄 Postagens</Text>
+          <Icon
+            name="article"
+            size={24}
+            color={currentScreen === 'Postagens' ? '#6200ee' : '#666'}
+          />
+          <Text style={currentScreen === 'Postagens' ? styles.menuButtonActive : styles.menuButtonText}>
+            Postagens
+          </Text>
         </TouchableOpacity>
+
         <TouchableOpacity
           style={styles.menuButton}
           onPress={() => setCurrentScreen('Propostas')}
         >
-          <Text style={currentScreen === 'Propostas' ? styles.menuButtonActive : styles.menuButtonText}>📋 Propostas</Text>
+          <Icon
+            name="assignment"
+            size={24}
+            color={currentScreen === 'Propostas' ? '#6200ee' : '#666'}
+          />
+          <Text style={currentScreen === 'Propostas' ? styles.menuButtonActive : styles.menuButtonText}>
+            Propostas
+          </Text>
         </TouchableOpacity>
+
         <TouchableOpacity
           style={styles.menuButton}
           onPress={() => setCurrentScreen('Perfil')}
         >
-          <Text style={currentScreen === 'Perfil' ? styles.menuButtonActive : styles.menuButtonText}>👤 Perfil</Text>
+          <Icon
+            name="person"
+            size={24}
+            color={currentScreen === 'Perfil' ? '#6200ee' : '#666'}
+          />
+          <Text style={currentScreen === 'Perfil' ? styles.menuButtonActive : styles.menuButtonText}>
+            Perfil
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -687,6 +778,12 @@ const styles = StyleSheet.create({
     right: 10,
     alignItems: 'flex-end',
   },
+  cardTags2: {
+    position: 'absolute',
+    top: 25,
+    right: 10,
+    alignItems: 'flex-end',
+  },
   tag: {
     backgroundColor: '#6200ee',
     borderRadius: 12,
@@ -713,7 +810,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 9,
+    marginBottom: 8,
   },
   profileBio: {
     fontSize: 14,
@@ -820,12 +917,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   menuButtonText: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#666',
+    marginTop: 4,
   },
   menuButtonActive: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#6200ee',
     fontWeight: 'bold',
+    marginTop: 4,
   },
 });
