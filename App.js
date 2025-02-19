@@ -279,29 +279,7 @@ events: [
             </View>
             
             
-            <View style={styles.eventsContainer}>
-              {posts.map((post) => (
-                <TouchableOpacity
-                  key={post.id}
-                  style={styles.eventCard}
-                  onPress={() => openPostDetails(post)}
-                >
-                  <Image
-                    style={styles.eventImage}
-                    source={post.image}
-                  />
-                  <Text style={styles.eventDescription}>{post.description}</Text>
-                  {/* Tags no canto direito */}
-                  <View style={styles.cardTags}>
-                    {post.tags.map((tag, index) => (
-                      <View key={index} style={styles.tag}>
-                        <Text style={styles.tagText}>{tag}</Text>
-                      </View>
-                    ))}
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </View>
+            
           </ScrollView>
         );
       case 'Postagens':
