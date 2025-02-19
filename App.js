@@ -15,10 +15,9 @@ export default function App() {
     return (
       <View style={styles.loginContainer}>
         <Image
-          source={require('./assets/logoBlack.png')} // Mock da logo
+          source={require('./assets/logoBlackv2.png')} // Mock da logo
           style={styles.logo}
         />
-        <Text style={styles.loginTitle}>Login</Text>
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -186,7 +185,7 @@ events: [
             {/* Menu Superior */}
             <View style={styles.topMenu}>
               <Image
-                source={require('./assets/logoBlack.png')} // Mock da logo
+                source={require('./assets/logoBlackv2.png')} // Mock da logo
                 style={styles.logo}
               />
               <View style={styles.searchContainer}>
@@ -288,7 +287,7 @@ events: [
             {/* Menu Superior */}
             <View style={styles.topMenu}>
               <Image
-                source={require('./assets/logoBlack.png')} // Mock da logo
+                source={require('./assets/logoBlackv2.png')} // Mock da logo
                 style={styles.logo}
               />
               <View style={styles.searchContainer}>
@@ -341,7 +340,7 @@ events: [
             {/* Menu Superior */}
             <View style={styles.topMenu}>
               <Image
-                source={require('./assets/logoBlack.png')} // Mock da logo
+                source={require('./assets/logoBlackv2.png')} // Mock da logo
                 style={styles.logo}
               />
               <View style={styles.searchContainer}>
@@ -586,14 +585,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
     padding: 20,
   },
-  loginTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    color: '#333',
-  },
   input: {
-    width: '100%',
+    width: '80%',
     height: 40,
     borderColor: '#ccc',
     borderWidth: 1,
@@ -603,7 +596,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   loginButton: {
-    width: '100%',
+    width: '80%',
     height: 40,
     backgroundColor: '#6200ee',
     justifyContent: 'center',
@@ -631,9 +624,10 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   logo: {
-    width: '100%',
-    height: 100,
-    marginBottom: 16,
+    width: '85%',
+    height: 85,
+    marginBottom: 56,
+    marginTop: 70,
   },
   searchContainer: {
     flexDirection: 'row',
