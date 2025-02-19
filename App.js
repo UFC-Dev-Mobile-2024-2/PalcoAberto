@@ -52,7 +52,7 @@ function ArtistProfile() {
     {
       id: 1,
       type: 'post',
-      image: require('./assets/image.png'),
+      image: require('./assets/de.jpg'),
       description: 'Show incrível no Festival de Verão!',
       details: 'Foi um show emocionante com mais de 50 mil pessoas presentes. Reggaezim do Cera arrasou no palco principal!',
       tags: ['DJ', 'Eletrônico'], // Tags de gênero e tipo de artista
@@ -60,7 +60,7 @@ function ArtistProfile() {
     {
       id: 2,
       type: 'post',
-      image: require('./assets/image.png'),
+      image: require('./assets/fg.jpg'),
       description: 'Novo single lançado!',
       details: 'Ouça agora o novo single "Vibração Cósmica" nas principais plataformas de streaming.',
       tags: ['Solo', 'Reggae'], // Tags de gênero e tipo de artista
@@ -68,7 +68,7 @@ function ArtistProfile() {
     {
       id: 3,
       type: 'post',
-      image: require('./assets/image.png'),
+      image: require('./assets/gh.jpg'),
       description: 'Entrevista exclusiva!',
       details: 'Confira a entrevista de Reggaezim do Cera na revista Rolling Stone.',
       tags: ['Duo', 'Rock'], // Tags de gênero e tipo de artista
