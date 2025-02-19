@@ -118,7 +118,7 @@ events: [
         title: 'Festival de Verão 2023',
         date: '15/12/2023',
         location: 'São Paulo, SP', 
-        image: require('./assets/image.png'),
+        image: require('./assets/ab.JPG'),
         tags: ['Solo', 'Reggae'], // Tags de gênero e tipo de artista
       },
       {
@@ -126,7 +126,7 @@ events: [
         title: 'Noite Eletrônica',
         date: '20/01/2024',
         location: 'Rio de Janeiro, RJ',
-        image: require('./assets/image.png'),
+        image: require('./assets/bc.JPG'),
         tags: ['Solo', 'Reggae'], // Tags de gênero e tipo de artista
       },
       {
@@ -134,7 +134,7 @@ events: [
         title: 'Show Beneficente',
         date: '05/02/2024',
         location: 'Belo Horizonte, MG',
-        image: require('./assets/image.png'),
+        image: require('./assets/cd.JPG'),
         tags: ['Solo', 'Reggae'], // Tags de gênero e tipo de artista
       },
     ],
