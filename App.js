@@ -347,7 +347,7 @@ events: [
               <View style={styles.searchContainer}>
                 <TextInput
                   style={styles.searchInput}
-                  placeholder="Buscar propostas..."
+                  placeholder="Buscar eventos..."
                   placeholderTextColor="#999"
                   value={searchQuery}
                   onChangeText={setSearchQuery}
@@ -363,8 +363,8 @@ events: [
             </View>
 
             {/* Lista de Propostas */}
-            <Text style={styles.sectionTitle}>Propostas</Text>
-            {/* gabriel */}
+            <Text style={styles.sectionTitle}>Eventos</Text>
+            {/* GABRIEL */}
             <View style={styles.eventsContainer}>
               {profileData.events.map((event) => (
                 <TouchableOpacity
@@ -429,6 +429,7 @@ events: [
 
             {/* Seção de Eventos Criados */}
             <Text style={styles.sectionTitle}>Eventos Criados</Text>
+            {/* GABRIEL */}
             <View style={styles.eventsContainer}>
               {profileData.events.map((event) => (
                 <TouchableOpacity
@@ -440,12 +441,26 @@ events: [
                     source={event.image}
                     style={styles.eventImage}
                   />
+                  
                   <View style={styles.eventDetails}>
+                  
                     <Text style={styles.eventTitle}>{event.title}</Text>
                     <Text style={styles.eventDate}>{event.date}</Text>
                     <Text style={styles.eventLocation}>{event.location}</Text>
+                  
+                   {/* Tags no canto direito */}
+                  <View style={styles.cardTags2}>
+                    {event.tags.map((tag, index) => (
+                      <View key={index} style={styles.tag}>
+                        <Text style={styles.tagText}>{tag}</Text>
+                      </View>
+                    ))}
+                  
+                  </View>
                   </View>
                 </TouchableOpacity>
+
+                
               ))}
             </View>
 
@@ -540,7 +555,7 @@ events: [
             color={currentScreen === 'Propostas' ? '#6200ee' : '#666'}
           />
           <Text style={currentScreen === 'Propostas' ? styles.menuButtonActive : styles.menuButtonText}>
-            Propostas
+            Eventos
           </Text>
         </TouchableOpacity>
 
