@@ -6,7 +6,7 @@ Aplicativo onde produtores de eventos e donos de casas de show e estabelecimento
 - Francisco Moreira (Projeto IV e PIM)
 - Gabriel Okidoi (PIM)
 - Guilherme Gamal (Projeto IV)
-- LázarO fREITAS (PIM)
+- Lázaro Freitas (PIM)
 - Monica Krieger (Projeto IV e PIM)
 - Thais Alves (Projeto IV e PIM)
 
