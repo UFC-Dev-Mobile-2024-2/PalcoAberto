@@ -364,26 +364,38 @@ events: [
 
             {/* Lista de Propostas */}
             <Text style={styles.sectionTitle}>Propostas</Text>
-            <View style={styles.proposalsContainer}>
-              {proposals.map((proposal) => (
+            {/* gabriel */}
+            <View style={styles.eventsContainer}>
+              {profileData.events.map((event) => (
                 <TouchableOpacity
-                  key={proposal.id}
-                  style={styles.largeCard}
-                  onPress={() => openPostDetails(proposal)}
+                  key={event.id}
+                  style={styles.eventCard}
+                  onPress={() => openPostDetails(event)}
                 >
                   <Image
-                    style={styles.largeCardImage}
-                    source={proposal.image}
+                    source={event.image}
+                    style={styles.eventImage}
                   />
-                  <Text style={styles.largeCardDescription}>{proposal.description}</Text>
-                  <View style={styles.cardTags}>
-                    {proposal.tags.map((tag, index) => (
+                  
+                  <View style={styles.eventDetails}>
+                  
+                    <Text style={styles.eventTitle}>{event.title}</Text>
+                    <Text style={styles.eventDate}>{event.date}</Text>
+                    <Text style={styles.eventLocation}>{event.location}</Text>
+                  
+                   {/* Tags no canto direito */}
+                  <View style={styles.cardTags2}>
+                    {event.tags.map((tag, index) => (
                       <View key={index} style={styles.tag}>
                         <Text style={styles.tagText}>{tag}</Text>
                       </View>
                     ))}
+                  
+                  </View>
                   </View>
                 </TouchableOpacity>
+
+                
               ))}
             </View>
           </ScrollView>
