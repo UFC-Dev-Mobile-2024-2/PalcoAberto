@@ -185,7 +185,7 @@ events: [
             {/* Menu Superior */}
             <Image
                 source={require('./assets/logoBlackv2.png')} // Mock da logo
-                style={styles.logoHome}
+                style={styles.logoPaginas}
               />
             <View style={styles.topMenu}>
               <View style={styles.searchContainer}>
@@ -283,11 +283,11 @@ events: [
         return (
           <ScrollView style={styles.container}>
             {/* Menu Superior */}
-            <View style={styles.topMenu}>
-              <Image
+            <Image
                 source={require('./assets/logoBlackv2.png')} // Mock da logo
-                style={styles.logo}
+                style={styles.logoPaginas}
               />
+            <View style={styles.topMenu}>
               <View style={styles.searchContainer}>
                 <TextInput
                   style={styles.searchInput}
@@ -336,11 +336,11 @@ events: [
         return (
           <ScrollView style={styles.container}>
             {/* Menu Superior */}
-            <View style={styles.topMenu}>
-              <Image
+            <Image
                 source={require('./assets/logoBlackv2.png')} // Mock da logo
-                style={styles.logo}
+                style={styles.logoPaginas}
               />
+            <View style={styles.topMenu}>
               <View style={styles.searchContainer}>
                 <TextInput
                   style={styles.searchInput}
@@ -627,7 +627,7 @@ const styles = StyleSheet.create({
     marginBottom: 56,
     marginTop: 70,
   },
-  logoHome: {
+  logoPaginas: {
     width: '30%',
     height: 30,
     marginBottom: 20,
@@ -810,6 +810,7 @@ const styles = StyleSheet.create({
     height: 120,
     borderRadius: 60,
     marginBottom: 16,
+    marginTop: 56,
   },
   profileName: {
     fontSize: 24,
