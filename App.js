@@ -52,7 +52,7 @@ function ArtistProfile() {
       id: 1,
       type: 'post',
       image: require('./assets/de.jpg'),
-      description: 'Show incrível no Festival de Verão!',
+      description: 'Show no Festival de Verão!',
       details: 'Foi um show emocionante com mais de 50 mil pessoas presentes. Reggaezim do Cera arrasou no palco principal!',
       tags: ['DJ', 'Eletrônico'], // Tags de gênero e tipo de artista
     },
@@ -183,11 +183,11 @@ events: [
         return (
           <ScrollView style={styles.container}>
             {/* Menu Superior */}
-            <View style={styles.topMenu}>
-              <Image
+            <Image
                 source={require('./assets/logoBlackv2.png')} // Mock da logo
-                style={styles.logo}
+                style={styles.logoHome}
               />
+            <View style={styles.topMenu}>
               <View style={styles.searchContainer}>
                 <TextInput
                   style={styles.searchInput}
@@ -239,9 +239,7 @@ events: [
 
             {/* Seção de Eventos */}
             <Text style={styles.sectionTitle}>Eventos</Text>
-            
- 
-        
+
         <View style={styles.eventsContainer}>
               {profileData.events.map((event) => (
                 <TouchableOpacity
@@ -629,6 +627,12 @@ const styles = StyleSheet.create({
     marginBottom: 56,
     marginTop: 70,
   },
+  logoHome: {
+    width: '30%',
+    height: 30,
+    marginBottom: 20,
+    marginTop: 70,
+  },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -772,10 +776,11 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   cardTags: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    alignItems: 'flex-end',
+    top: 3,
+    right:3,
+    marginBottom: 10,
+    display: 'flex',
+    flexDirection: 'row',
   },
   cardTags2: {
     position: 'absolute',
@@ -788,7 +793,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingVertical: 4,
     paddingHorizontal: 8,
-    marginBottom: 4,
+    marginBottom: 2,
+    marginLeft: 10,
   },
   tagText: {
     fontSize: 12,
