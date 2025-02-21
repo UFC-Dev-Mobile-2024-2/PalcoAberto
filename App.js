@@ -1,50 +1,44 @@
 import React, { useState } from 'react';
-import { Text, StyleSheet, View, ScrollView, Image, TouchableOpacity, TextInput, Modal } from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  View,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  TextInput,
+  Modal,
+  Alert,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Importando ícones do Material Design
+import axios from 'axios'; // Para fazer requisições HTTP
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Estado para controlar se o usuário está logado
-
-  // Função para simular o login
-  const handleLogin = () => {
-    setIsLoggedIn(true); // Define o estado como logado
-  };
-
-  // Se o usuário não estiver logado, exibe a tela de login
-  if (!isLoggedIn) {
-    return (
-      <View style={styles.loginContainer}>
-        <Image
-          source={require('./assets/logoBlackv2.png')} // Mock da logo
-          style={styles.logo}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          placeholderTextColor="#999"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Senha"
-          placeholderTextColor="#999"
-          secureTextEntry
-        />
-        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-          <Text style={styles.loginButtonText}>Entrar</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-
-  // Se o usuário estiver logado, exibe a tela do artista
-  return <ArtistProfile />;
-}
-
-function ArtistProfile() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [currentScreen, setCurrentScreen] = useState('Home'); // Estado para controlar a tela atual
   const [selectedPost, setSelectedPost] = useState(null); // Estado para armazenar o post selecionado
   const [modalVisible, setModalVisible] = useState(false); // Estado para controlar a visibilidade do modal
   const [searchQuery, setSearchQuery] = useState(''); // Estado para armazenar a busca
+
+  // Função para fazer login com a API reqres.in
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('https://reqres.in/api/login', {
+        email: email,
+        password: password,
+      });
+
+      if (response.data.token) {
+        setIsLoggedIn(true); // Define o estado como logado
+      } else {
+        Alert.alert('Erro', 'Credenciais inválidas');
+      }
+    } catch (error) {
+      Alert.alert('Erro', 'Ocorreu um erro ao tentar fazer login');
+    }
+  };
 
   // Dados das postagens e eventos (mock)
   const posts = [
@@ -106,17 +100,17 @@ function ArtistProfile() {
     name: 'Carlos Eventos',
     bio: 'Produtor de eventos com mais de 10 anos de experiência, especializado em festivais e shows ao vivo.',
     profileImage: require('./assets/image.png'), // Mock da imagem do perfil
-     socialLinks: [
-    { id: 1, icon: 'language', label: 'Site' }, // Ícone do Material Design para Site
-    { id: 2, icon: 'camera-alt', label: 'Instagram' }, // Ícone do Material Design para Instagram
-    { id: 3, icon: 'email', label: 'Email' }, // Ícone do Material Design para Email
-  ],
-events: [
+    socialLinks: [
+      { id: 1, icon: 'language', label: 'Site' }, // Ícone do Material Design para Site
+      { id: 2, icon: 'camera-alt', label: 'Instagram' }, // Ícone do Material Design para Instagram
+      { id: 3, icon: 'email', label: 'Email' }, // Ícone do Material Design para Email
+    ],
+    events: [
       {
         id: 1,
         title: 'Festival de Verão 2023',
         date: '15/12/2023',
-        location: 'São Paulo, SP', 
+        location: 'São Paulo, SP',
         image: require('./assets/ab.JPG'),
         tags: ['Solo', 'Reggae'], // Tags de gênero e tipo de artista
       },
@@ -173,7 +167,7 @@ events: [
 
   // Função mockada para filtrar posts (simulação)
   const filterPosts = () => {
-    alert();
+    alert('Filtrar posts');
   };
 
   // Função para renderizar o conteúdo com base na tela atual
@@ -184,9 +178,9 @@ events: [
           <ScrollView style={styles.container}>
             {/* Menu Superior */}
             <Image
-                source={require('./assets/logoBlackv2.png')} // Mock da logo
-                style={styles.logoPaginas}
-              />
+              source={require('./assets/logoBlakv2.png')} // Mock da logo
+              style={styles.logoPaginas}
+            />
             <View style={styles.topMenu}>
               <View style={styles.searchContainer}>
                 <TextInput
@@ -198,17 +192,17 @@ events: [
                 />
                 <TouchableOpacity style={styles.searchButton} onPress={filterPosts}>
                   <Icon
-      name="search" // Ícone do Material Design para lupa
-      size={24} // Tamanho do ícone
-      color="#6200ee" // Cor do ícone (roxo)
-    />
+                    name="search" // Ícone do Material Design para lupa
+                    size={24} // Tamanho do ícone
+                    color="#6200ee" // Cor do ícone (roxo)
+                  />
                 </TouchableOpacity>
               </View>
             </View>
 
             {/* Seção de Posts em Destaque */}
             <Text style={styles.sectionTitle}>Posts em Destaque</Text>
-            
+
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
@@ -240,7 +234,7 @@ events: [
             {/* Seção de Eventos */}
             <Text style={styles.sectionTitle}>Eventos</Text>
 
-        <View style={styles.eventsContainer}>
+            <View style={styles.eventsContainer}>
               {profileData.events.map((event) => (
                 <TouchableOpacity
                   key={event.id}
@@ -251,32 +245,24 @@ events: [
                     source={event.image}
                     style={styles.eventImage}
                   />
-                  
+
                   <View style={styles.eventDetails}>
-                  
                     <Text style={styles.eventTitle}>{event.title}</Text>
                     <Text style={styles.eventDate}>{event.date}</Text>
                     <Text style={styles.eventLocation}>{event.location}</Text>
-                  
-                    {/* CHICO */}
-                   {/* Tags no canto direito */}
-                  <View style={styles.cardTags2}>
-                    {event.tags.map((tag, index) => (
-                      <View key={index} style={styles.tag}>
-                        <Text style={styles.tagText}>{tag}</Text>
-                      </View>
-                    ))}
-                  
-                  </View>
+
+                    {/* Tags no canto direito */}
+                    <View style={styles.cardTags2}>
+                      {event.tags.map((tag, index) => (
+                        <View key={index} style={styles.tag}>
+                          <Text style={styles.tagText}>{tag}</Text>
+                        </View>
+                      ))}
+                    </View>
                   </View>
                 </TouchableOpacity>
-
-                
               ))}
             </View>
-            
-            
-            
           </ScrollView>
         );
       case 'Postagens':
@@ -284,9 +270,9 @@ events: [
           <ScrollView style={styles.container}>
             {/* Menu Superior */}
             <Image
-                source={require('./assets/logoBlackv2.png')} // Mock da logo
-                style={styles.logoPaginas}
-              />
+              source={require('./assets/logoBlakv2.png')} // Mock da logo
+              style={styles.logoPaginas}
+            />
             <View style={styles.topMenu}>
               <View style={styles.searchContainer}>
                 <TextInput
@@ -298,10 +284,10 @@ events: [
                 />
                 <TouchableOpacity style={styles.searchButton} onPress={filterPosts}>
                   <Icon
-      name="search" // Ícone do Material Design para lupa
-      size={24} // Tamanho do ícone
-      color="#6200ee" // Cor do ícone (roxo)
-    />
+                    name="search" // Ícone do Material Design para lupa
+                    size={24} // Tamanho do ícone
+                    color="#6200ee" // Cor do ícone (roxo)
+                  />
                 </TouchableOpacity>
               </View>
             </View>
@@ -337,9 +323,9 @@ events: [
           <ScrollView style={styles.container}>
             {/* Menu Superior */}
             <Image
-                source={require('./assets/logoBlackv2.png')} // Mock da logo
-                style={styles.logoPaginas}
-              />
+              source={require('./assets/logoBlakv2.png')} // Mock da logo
+              style={styles.logoPaginas}
+            />
             <View style={styles.topMenu}>
               <View style={styles.searchContainer}>
                 <TextInput
@@ -351,17 +337,16 @@ events: [
                 />
                 <TouchableOpacity style={styles.searchButton} onPress={filterPosts}>
                   <Icon
-      name="search" // Ícone do Material Design para lupa
-      size={24} // Tamanho do ícone
-      color="#6200ee" // Cor do ícone (roxo)
-    />
+                    name="search" // Ícone do Material Design para lupa
+                    size={24} // Tamanho do ícone
+                    color="#6200ee" // Cor do ícone (roxo)
+                  />
                 </TouchableOpacity>
               </View>
             </View>
 
             {/* Lista de Propostas */}
             <Text style={styles.sectionTitle}>Eventos</Text>
-            {/* GABRIEL */}
             <View style={styles.eventsContainer}>
               {profileData.events.map((event) => (
                 <TouchableOpacity
@@ -373,26 +358,22 @@ events: [
                     source={event.image}
                     style={styles.eventImage}
                   />
-                  
+
                   <View style={styles.eventDetails}>
-                  
                     <Text style={styles.eventTitle}>{event.title}</Text>
                     <Text style={styles.eventDate}>{event.date}</Text>
                     <Text style={styles.eventLocation}>{event.location}</Text>
-                  
-                   {/* Tags no canto direito */}
-                  <View style={styles.cardTags2}>
-                    {event.tags.map((tag, index) => (
-                      <View key={index} style={styles.tag}>
-                        <Text style={styles.tagText}>{tag}</Text>
-                      </View>
-                    ))}
-                  
-                  </View>
+
+                    {/* Tags no canto direito */}
+                    <View style={styles.cardTags2}>
+                      {event.tags.map((tag, index) => (
+                        <View key={index} style={styles.tag}>
+                          <Text style={styles.tagText}>{tag}</Text>
+                        </View>
+                      ))}
+                    </View>
                   </View>
                 </TouchableOpacity>
-
-                
               ))}
             </View>
           </ScrollView>
@@ -414,10 +395,10 @@ events: [
                 {profileData.socialLinks.map((link) => (
                   <TouchableOpacity key={link.id} style={styles.socialLinkButton}>
                     <Icon
-        name={link.icon} // Usando o ícone do Material Design
-        size={24} // Tamanho do ícone
-        color="#6200ee" // Cor do ícone (roxo)
-      />
+                      name={link.icon} // Usando o ícone do Material Design
+                      size={24} // Tamanho do ícone
+                      color="#6200ee" // Cor do ícone (roxo)
+                    />
                     <Text style={styles.socialLinkLabel}>{link.label}</Text>
                   </TouchableOpacity>
                 ))}
@@ -426,7 +407,6 @@ events: [
 
             {/* Seção de Eventos Criados */}
             <Text style={styles.sectionTitle}>Eventos Criados</Text>
-            {/* GABRIEL */}
             <View style={styles.eventsContainer}>
               {profileData.events.map((event) => (
                 <TouchableOpacity
@@ -438,26 +418,22 @@ events: [
                     source={event.image}
                     style={styles.eventImage}
                   />
-                  
+
                   <View style={styles.eventDetails}>
-                  
                     <Text style={styles.eventTitle}>{event.title}</Text>
                     <Text style={styles.eventDate}>{event.date}</Text>
                     <Text style={styles.eventLocation}>{event.location}</Text>
-                  
-                   {/* Tags no canto direito */}
-                  <View style={styles.cardTags2}>
-                    {event.tags.map((tag, index) => (
-                      <View key={index} style={styles.tag}>
-                        <Text style={styles.tagText}>{tag}</Text>
-                      </View>
-                    ))}
-                  
-                  </View>
+
+                    {/* Tags no canto direito */}
+                    <View style={styles.cardTags2}>
+                      {event.tags.map((tag, index) => (
+                        <View key={index} style={styles.tag}>
+                          <Text style={styles.tagText}>{tag}</Text>
+                        </View>
+                      ))}
+                    </View>
                   </View>
                 </TouchableOpacity>
-
-                
               ))}
             </View>
 
@@ -480,6 +456,36 @@ events: [
         return null;
     }
   };
+
+  // Se o usuário não estiver logado, exibe a tela de login
+  if (!isLoggedIn) {
+    return (
+      <View style={styles.loginContainer}>
+        <Image
+          source={require('./assets/logoBlakv2.png')} // Mock da logo
+          style={styles.logo}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          placeholderTextColor="#999"
+          value={email}
+          onChangeText={setEmail}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Senha"
+          placeholderTextColor="#999"
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
+        />
+        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+          <Text style={styles.loginButtonText}>Entrar</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.fullContainer}>
@@ -511,6 +517,16 @@ events: [
           </View>
         </View>
       </Modal>
+
+      {/* Botão Flutuante */}
+      {currentScreen !== 'Perfil' && (
+        <TouchableOpacity
+          style={styles.floatingButton}
+          onPress={() => Alert.alert('Adicionar', 'Adicionar postagem ou evento')}
+        >
+          <Icon name="add" size={30} color="#fff" />
+        </TouchableOpacity>
+      )}
 
       {/* Barra de Menu Inferior com Ícones do Material Design */}
       <View style={styles.bottomMenu}>
@@ -654,10 +670,6 @@ const styles = StyleSheet.create({
   searchButton: {
     padding: 10,
   },
-  searchButtonText: {
-    fontSize: 18,
-    color: '#6200ee',
-  },
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -751,33 +763,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#333',
   },
-  proposalsContainer: {
-    marginBottom: 16,
-  },
-  largeCard: {
-    width: '100%',
-    borderRadius: 10,
-    backgroundColor: '#fff',
-    overflow: 'hidden',
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    marginBottom: 16,
-  },
-  largeCardImage: {
-    width: '100%',
-    height: 200,
-  },
-  largeCardDescription: {
-    padding: 8,
-    fontSize: 14,
-    color: '#333',
-  },
   cardTags: {
     top: 3,
-    right:3,
+    right: 3,
     marginBottom: 10,
     display: 'flex',
     flexDirection: 'row',
@@ -831,9 +819,6 @@ const styles = StyleSheet.create({
   socialLinkButton: {
     alignItems: 'center',
     marginHorizontal: 8,
-  },
-  socialLinkIcon: {
-    fontSize: 24,
   },
   socialLinkLabel: {
     fontSize: 12,
@@ -932,5 +917,21 @@ const styles = StyleSheet.create({
     color: '#6200ee',
     fontWeight: 'bold',
     marginTop: 4,
+  },
+  floatingButton: {
+    position: 'absolute',
+    bottom: 80,
+    right: 20,
+    backgroundColor: '#6200ee',
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
   },
 });
