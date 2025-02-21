@@ -46,56 +46,46 @@ export default function App() {
       id: 1,
       type: 'post',
       image: require('./assets/de.jpg'),
-      description: 'Show no Festival de Verão!',
+      description: 'O Festival de Verão foi incrível!',
       details: 'Foi um show emocionante com mais de 50 mil pessoas presentes. Reggaezim do Cera arrasou no palco principal!',
-      tags: ['DJ', 'Eletrônico'], // Tags de gênero e tipo de artista
+       date: '15/12/2023',
+        location: 'São Paulo, SP',
+      tags: ['Banda', 'Rock'], // Tags de gênero e tipo de artista
     },
     {
       id: 2,
       type: 'post',
       image: require('./assets/fg.jpg'),
-      description: 'Novo single lançado!',
+      description: 'Novo single lançado! Confiram!',
       details: 'Ouça agora o novo single "Vibração Cósmica" nas principais plataformas de streaming.',
-      tags: ['Solo', 'Reggae'], // Tags de gênero e tipo de artista
+       date: '15/12/2023',
+        location: 'São Paulo, SP',
+      tags: ['Banda', 'Rock'], // Tags de gênero e tipo de artista
     },
     {
       id: 3,
       type: 'post',
       image: require('./assets/gh.jpg'),
-      description: 'Entrevista exclusiva!',
+      description: 'O que falar da apresentação no matulão!',
       details: 'Confira a entrevista de Reggaezim do Cera na revista Rolling Stone.',
-      tags: ['Duo', 'Rock'], // Tags de gênero e tipo de artista
+       date: '15/12/2023',
+        location: 'São Paulo, SP',
+      tags: ['solo', 'Rock'], // Tags de gênero e tipo de artista
+    },
+    {
+      id: 4,
+      type: 'post',
+      image: require('./assets/gh.jpg'),
+      description: 'Confira como foi nosso show em Quixadá',
+      details: 'Confira a entrevista de Reggaezim do Cera na revista Rolling Stone.',
+      date: '15/12/2023',
+      location: 'São Paulo, SP',
+      tags: ['duo', 'Reggae'], // Tags de gênero e tipo de artista
     },
   ];
 
-  const proposals = [
-    {
-      id: 1,
-      type: 'proposal',
-      image: require('./assets/image.png'),
-      description: 'Festival de Inverno',
-      details: 'Não perca o Festival de Inverno no próximo mês! Será um evento épico com várias atrações.',
-      tags: ['DJ', 'Eletrônico'], // Tags de gênero e tipo de artista
-    },
-    {
-      id: 2,
-      type: 'proposal',
-      image: require('./assets/image.png'),
-      description: 'Show Beneficente',
-      details: 'Participe do show beneficente para ajudar crianças carentes.',
-      tags: ['Solo', 'Pop'], // Tags de gênero e tipo de artista
-    },
-    {
-      id: 3,
-      type: 'proposal',
-      image: require('./assets/image.png'),
-      description: 'Lançamento do Novo Álbum',
-      details: 'Venha para o lançamento do novo álbum "Vibração Cósmica".',
-      tags: ['Duo', 'Reggae'], // Tags de gênero e tipo de artista
-    },
-  ];
 
-  // Dados do perfil do produtor de eventos (mock)
+  // Dados do perfil do produtor de eventos 
   const profileData = {
     name: 'Carlos Eventos',
     bio: 'Produtor de eventos com mais de 10 anos de experiência, especializado em festivais e shows ao vivo.',
@@ -108,11 +98,12 @@ export default function App() {
     events: [
       {
         id: 1,
-        title: 'Festival de Verão 2023',
+        title: 'Show de forró',
         date: '15/12/2023',
         location: 'São Paulo, SP',
         image: require('./assets/ab.JPG'),
-        tags: ['Solo', 'Reggae'], // Tags de gênero e tipo de artista
+        tags: ['Banda', 'Forró'], // Tags de gênero e tipo de artista
+        details: 'Confira a entrevista de Reggaezim do Cera na revista Rolling Stone.',
       },
       {
         id: 2,
@@ -120,7 +111,8 @@ export default function App() {
         date: '20/01/2024',
         location: 'Rio de Janeiro, RJ',
         image: require('./assets/bc.JPG'),
-        tags: ['Solo', 'Reggae'], // Tags de gênero e tipo de artista
+        tags: ['Solo', 'Eletrônico'], // Tags de gênero e tipo de artista,
+        details: 'Confira a entrevista de Reggaezim do Cera na revista Rolling Stone.',
       },
       {
         id: 3,
@@ -128,7 +120,8 @@ export default function App() {
         date: '05/02/2024',
         location: 'Belo Horizonte, MG',
         image: require('./assets/cd.JPG'),
-        tags: ['Solo', 'Reggae'], // Tags de gênero e tipo de artista
+        tags: ['Festival'], // Tags de gênero e tipo de artista
+        details: 'Confira a entrevista de Reggaezim do Cera na revista Rolling Stone.',
       },
     ],
     reviews: [
@@ -136,7 +129,7 @@ export default function App() {
         id: 1,
         author: 'João Silva',
         rating: 5,
-        comment: 'Evento incrível! Tudo foi muito bem organizado.',
+        comment: 'Eventos incríveis! Tudo foi muito bem organizado.',
       },
       {
         id: 2,
@@ -165,10 +158,7 @@ export default function App() {
     setSelectedPost(null); // Limpa o post selecionado
   };
 
-  // Função mockada para filtrar posts (simulação)
-  const filterPosts = () => {
-    alert('Filtrar posts');
-  };
+
 
   // Função para renderizar o conteúdo com base na tela atual
   const renderContent = () => {
@@ -190,7 +180,7 @@ export default function App() {
                   value={searchQuery}
                   onChangeText={setSearchQuery}
                 />
-                <TouchableOpacity style={styles.searchButton} onPress={filterPosts}>
+                <TouchableOpacity style={styles.searchButton} >
                   <Icon
                     name="search" // Ícone do Material Design para lupa
                     size={24} // Tamanho do ícone
@@ -201,7 +191,7 @@ export default function App() {
             </View>
 
             {/* Seção de Posts em Destaque */}
-            <Text style={styles.sectionTitle}>Posts em Destaque</Text>
+            <Text style={styles.sectionTitle}>Postagens em Destaque</Text>
 
             <ScrollView
               horizontal
@@ -282,7 +272,7 @@ export default function App() {
                   value={searchQuery}
                   onChangeText={setSearchQuery}
                 />
-                <TouchableOpacity style={styles.searchButton} onPress={filterPosts}>
+                <TouchableOpacity style={styles.searchButton} >
                   <Icon
                     name="search" // Ícone do Material Design para lupa
                     size={24} // Tamanho do ícone
@@ -335,7 +325,7 @@ export default function App() {
                   value={searchQuery}
                   onChangeText={setSearchQuery}
                 />
-                <TouchableOpacity style={styles.searchButton} onPress={filterPosts}>
+                <TouchableOpacity style={styles.searchButton} >
                   <Icon
                     name="search" // Ícone do Material Design para lupa
                     size={24} // Tamanho do ícone
@@ -437,6 +427,31 @@ export default function App() {
               ))}
             </View>
 
+            {/* Seção de Meus Posts */}
+             <Text style={styles.sectionTitle}>Meus posts</Text>
+            <View style={styles.postsContainer}>
+              {posts.map((post) => (
+                <TouchableOpacity
+                  key={post.id}
+                  style={styles.smallCard}
+                  onPress={() => openPostDetails(post)}
+                >
+                  <Image
+                    style={styles.smallCardImage}
+                    source={post.image}
+                  />
+                  <Text style={styles.smallCardDescription}>{post.description}</Text>
+                  <View style={styles.cardTags}>
+                    {post.tags.map((tag, index) => (
+                      <View key={index} style={styles.tag}>
+                        <Text style={styles.tagText}>{tag}</Text>
+                      </View>
+                    ))}
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
+
             {/* Seção de Avaliações */}
             <Text style={styles.sectionTitle}>Avaliações</Text>
             <View style={styles.reviewsContainer}>
@@ -509,6 +524,7 @@ export default function App() {
                 />
                 <Text style={styles.modalTitle}>{selectedPost.title || selectedPost.description}</Text>
                 <Text style={styles.modalDetails}>{selectedPost.details}</Text>
+                <Text style={styles.modalDetails}>{selectedPost.date}</Text>
                 <TouchableOpacity style={styles.closeButton} onPress={closePostDetails}>
                   <Text style={styles.closeButtonText}>Fechar</Text>
                 </TouchableOpacity>
