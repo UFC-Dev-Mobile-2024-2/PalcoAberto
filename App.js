@@ -9,6 +9,7 @@ import {
   TextInput,
   Modal,
   Alert,
+  Picker,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Importando ícones do Material Design
 import axios from 'axios'; // Para fazer requisições HTTP
@@ -21,36 +22,22 @@ export default function App() {
   const [selectedPost, setSelectedPost] = useState(null); // Estado para armazenar o post selecionado
   const [modalVisible, setModalVisible] = useState(false); // Estado para controlar a visibilidade do modal
   const [searchQuery, setSearchQuery] = useState(''); // Estado para armazenar a busca
-
-  // Função para fazer login com a API reqres.in
-  const handleLogin = async () => {
-    try {
-      const response = await axios.post('https://reqres.in/api/login', {
-        email: email,
-        password: password,
-      });
-
-      if (response.data.token) {
-        setIsLoggedIn(true); // Define o estado como logado
-      } else {
-        Alert.alert('Erro', 'Credenciais inválidas');
-      }
-    } catch (error) {
-      Alert.alert('Erro', 'Ocorreu um erro ao tentar fazer login');
-    }
-  };
-
-  // Dados das postagens e eventos (mock)
-  const posts = [
+  const [createModalVisible, setCreateModalVisible] = useState(false); // Estado para controlar o modal de criação
+  const [newDescription, setNewDescription] = useState(''); // Estado para a descrição do novo post/evento
+  const [newDate, setNewDate] = useState(''); // Estado para a data do novo post/evento
+  const [newLocation, setNewLocation] = useState(''); // Estado para a localização do novo post/evento
+  const [newTag, setNewTag] = useState(''); // Estado para a tag do novo post/evento
+  const [contentType, setContentType] = useState('post'); // Estado para escolher entre post ou evento
+  const [posts, setPosts] = useState([ // Estado para gerenciar a lista de posts
     {
       id: 1,
       type: 'post',
       image: require('./assets/de.jpg'),
       description: 'O Festival de Verão foi incrível!',
       details: 'Foi um show emocionante com mais de 50 mil pessoas presentes. Reggaezim do Cera arrasou no palco principal!',
-       date: '15/12/2023',
-        location: 'São Paulo, SP',
-      tags: ['Banda', 'Rock'], // Tags de gênero e tipo de artista
+      date: '15/12/2023',
+      location: 'São Paulo, SP',
+      tags: ['Banda', 'Rock'],
     },
     {
       id: 2,
@@ -58,35 +45,13 @@ export default function App() {
       image: require('./assets/fg.jpg'),
       description: 'Novo single lançado! Confiram!',
       details: 'Ouça agora o novo single "Vibração Cósmica" nas principais plataformas de streaming.',
-       date: '15/12/2023',
-        location: 'São Paulo, SP',
-      tags: ['Banda', 'Rock'], // Tags de gênero e tipo de artista
-    },
-    {
-      id: 3,
-      type: 'post',
-      image: require('./assets/gh.jpg'),
-      description: 'O que falar da apresentação no matulão!',
-      details: 'Confira a entrevista de Reggaezim do Cera na revista Rolling Stone.',
-       date: '15/12/2023',
-        location: 'São Paulo, SP',
-      tags: ['solo', 'Rock'], // Tags de gênero e tipo de artista
-    },
-    {
-      id: 4,
-      type: 'post',
-      image: require('./assets/gh.jpg'),
-      description: 'Confira como foi nosso show em Quixadá',
-      details: 'Confira a entrevista de Reggaezim do Cera na revista Rolling Stone.',
       date: '15/12/2023',
       location: 'São Paulo, SP',
-      tags: ['duo', 'Reggae'], // Tags de gênero e tipo de artista
+      tags: ['Banda', 'Rock'],
     },
-  ];
+  ]);
 
-
-  // Dados do perfil do produtor de eventos 
-  const profileData = {
+  const [profileData, setProfileData] = useState({
     name: 'Carlos Eventos',
     bio: 'Produtor de eventos com mais de 10 anos de experiência, especializado em festivais e shows ao vivo.',
     profileImage: require('./assets/image.png'), // Mock da imagem do perfil
@@ -102,7 +67,7 @@ export default function App() {
         date: '15/12/2023',
         location: 'São Paulo, SP',
         image: require('./assets/ab.JPG'),
-        tags: ['Banda', 'Forró'], // Tags de gênero e tipo de artista
+        tags: ['Banda', 'Forró'],
         details: 'Confira a entrevista de Reggaezim do Cera na revista Rolling Stone.',
       },
       {
@@ -111,7 +76,7 @@ export default function App() {
         date: '20/01/2024',
         location: 'Rio de Janeiro, RJ',
         image: require('./assets/bc.JPG'),
-        tags: ['Solo', 'Eletrônico'], // Tags de gênero e tipo de artista,
+        tags: ['Solo', 'Eletrônico'],
         details: 'Confira a entrevista de Reggaezim do Cera na revista Rolling Stone.',
       },
       {
@@ -120,7 +85,7 @@ export default function App() {
         date: '05/02/2024',
         location: 'Belo Horizonte, MG',
         image: require('./assets/cd.JPG'),
-        tags: ['Festival'], // Tags de gênero e tipo de artista
+        tags: ['Festival'],
         details: 'Confira a entrevista de Reggaezim do Cera na revista Rolling Stone.',
       },
     ],
@@ -144,6 +109,24 @@ export default function App() {
         comment: 'Melhor evento que já fui! Parabéns à equipe.',
       },
     ],
+  });
+
+  // Função para fazer login com a API reqres.in
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('https://reqres.in/api/login', {
+        email: email,
+        password: password,
+      });
+
+      if (response.data.token) {
+        setIsLoggedIn(true); // Define o estado como logado
+      } else {
+        Alert.alert('Erro', 'Credenciais inválidas');
+      }
+    } catch (error) {
+      Alert.alert('Erro', 'Ocorreu um erro ao tentar fazer login');
+    }
   };
 
   // Função para abrir o modal com os detalhes do post
@@ -158,7 +141,48 @@ export default function App() {
     setSelectedPost(null); // Limpa o post selecionado
   };
 
+  // Função para criar um novo post/evento
+  const handleCreatePost = () => {
+    if (!newDescription || !newDate || !newLocation || !newTag) {
+      Alert.alert('Erro', 'Preencha todos os campos');
+      return;
+    }
 
+    if (contentType === 'post') {
+      const newPost = {
+        id: posts.length + 1, // Gera um novo ID
+        type: 'post',
+        image: require('./assets/de.jpg'), // Mock da imagem
+        description: newDescription,
+        details: 'Detalhes do novo post',
+        date: newDate,
+        location: newLocation,
+        tags: [newTag],
+      };
+      setPosts([...posts, newPost]); // Adiciona o novo post à lista de posts
+    } else if (contentType === 'event') {
+      const newEvent = {
+        id: profileData.events.length + 1, // Gera um novo ID
+        title: newDescription,
+        date: newDate,
+        location: newLocation,
+        image: require('./assets/de.jpg'), // Mock da imagem
+        tags: [newTag],
+        details: 'Detalhes do novo evento',
+      };
+      setProfileData({
+        ...profileData,
+        events: [...profileData.events, newEvent], // Adiciona o novo evento à lista de eventos
+      });
+    }
+
+    setCreateModalVisible(false); // Fecha o modal
+    setNewDescription(''); // Limpa os campos
+    setNewDate('');
+    setNewLocation('');
+    setNewTag('');
+    setContentType('post'); // Reseta o tipo de conteúdo para "post"
+  };
 
   // Função para renderizar o conteúdo com base na tela atual
   const renderContent = () => {
@@ -180,36 +204,19 @@ export default function App() {
                   value={searchQuery}
                   onChangeText={setSearchQuery}
                 />
-                <TouchableOpacity style={styles.searchButton} >
-                  <Icon
-                    name="search" // Ícone do Material Design para lupa
-                    size={24} // Tamanho do ícone
-                    color="#6200ee" // Cor do ícone (roxo)
-                  />
+                <TouchableOpacity style={styles.searchButton}>
+                  <Icon name="search" size={24} color="#6200ee" />
                 </TouchableOpacity>
               </View>
             </View>
 
             {/* Seção de Posts em Destaque */}
             <Text style={styles.sectionTitle}>Postagens em Destaque</Text>
-
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.highlightsContainer}
-            >
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.highlightsContainer}>
               {posts.map((post) => (
-                <TouchableOpacity
-                  key={post.id}
-                  style={styles.highlightCard}
-                  onPress={() => openPostDetails(post)}
-                >
-                  <Image
-                    style={styles.highlightImage}
-                    source={post.image}
-                  />
+                <TouchableOpacity key={post.id} style={styles.highlightCard} onPress={() => openPostDetails(post)}>
+                  <Image style={styles.highlightImage} source={post.image} />
                   <Text style={styles.highlightDescription}>{post.description}</Text>
-                  {/* Tags no canto direito */}
                   <View style={styles.cardTags}>
                     {post.tags.map((tag, index) => (
                       <View key={index} style={styles.tag}>
@@ -223,25 +230,14 @@ export default function App() {
 
             {/* Seção de Eventos */}
             <Text style={styles.sectionTitle}>Eventos</Text>
-
             <View style={styles.eventsContainer}>
               {profileData.events.map((event) => (
-                <TouchableOpacity
-                  key={event.id}
-                  style={styles.eventCard}
-                  onPress={() => openPostDetails(event)}
-                >
-                  <Image
-                    source={event.image}
-                    style={styles.eventImage}
-                  />
-
+                <TouchableOpacity key={event.id} style={styles.eventCard} onPress={() => openPostDetails(event)}>
+                  <Image source={event.image} style={styles.eventImage} />
                   <View style={styles.eventDetails}>
                     <Text style={styles.eventTitle}>{event.title}</Text>
                     <Text style={styles.eventDate}>{event.date}</Text>
                     <Text style={styles.eventLocation}>{event.location}</Text>
-
-                    {/* Tags no canto direito */}
                     <View style={styles.cardTags2}>
                       {event.tags.map((tag, index) => (
                         <View key={index} style={styles.tag}>
@@ -272,12 +268,8 @@ export default function App() {
                   value={searchQuery}
                   onChangeText={setSearchQuery}
                 />
-                <TouchableOpacity style={styles.searchButton} >
-                  <Icon
-                    name="search" // Ícone do Material Design para lupa
-                    size={24} // Tamanho do ícone
-                    color="#6200ee" // Cor do ícone (roxo)
-                  />
+                <TouchableOpacity style={styles.searchButton}>
+                  <Icon name="search" size={24} color="#6200ee" />
                 </TouchableOpacity>
               </View>
             </View>
@@ -286,15 +278,8 @@ export default function App() {
             <Text style={styles.sectionTitle}>Postagens</Text>
             <View style={styles.postsContainer}>
               {posts.map((post) => (
-                <TouchableOpacity
-                  key={post.id}
-                  style={styles.smallCard}
-                  onPress={() => openPostDetails(post)}
-                >
-                  <Image
-                    style={styles.smallCardImage}
-                    source={post.image}
-                  />
+                <TouchableOpacity key={post.id} style={styles.smallCard} onPress={() => openPostDetails(post)}>
+                  <Image style={styles.smallCardImage} source={post.image} />
                   <Text style={styles.smallCardDescription}>{post.description}</Text>
                   <View style={styles.cardTags}>
                     {post.tags.map((tag, index) => (
@@ -325,12 +310,8 @@ export default function App() {
                   value={searchQuery}
                   onChangeText={setSearchQuery}
                 />
-                <TouchableOpacity style={styles.searchButton} >
-                  <Icon
-                    name="search" // Ícone do Material Design para lupa
-                    size={24} // Tamanho do ícone
-                    color="#6200ee" // Cor do ícone (roxo)
-                  />
+                <TouchableOpacity style={styles.searchButton}>
+                  <Icon name="search" size={24} color="#6200ee" />
                 </TouchableOpacity>
               </View>
             </View>
@@ -339,22 +320,12 @@ export default function App() {
             <Text style={styles.sectionTitle}>Eventos</Text>
             <View style={styles.eventsContainer}>
               {profileData.events.map((event) => (
-                <TouchableOpacity
-                  key={event.id}
-                  style={styles.eventCard}
-                  onPress={() => openPostDetails(event)}
-                >
-                  <Image
-                    source={event.image}
-                    style={styles.eventImage}
-                  />
-
+                <TouchableOpacity key={event.id} style={styles.eventCard} onPress={() => openPostDetails(event)}>
+                  <Image source={event.image} style={styles.eventImage} />
                   <View style={styles.eventDetails}>
                     <Text style={styles.eventTitle}>{event.title}</Text>
                     <Text style={styles.eventDate}>{event.date}</Text>
                     <Text style={styles.eventLocation}>{event.location}</Text>
-
-                    {/* Tags no canto direito */}
                     <View style={styles.cardTags2}>
                       {event.tags.map((tag, index) => (
                         <View key={index} style={styles.tag}>
@@ -384,11 +355,7 @@ export default function App() {
               <View style={styles.socialLinksContainer}>
                 {profileData.socialLinks.map((link) => (
                   <TouchableOpacity key={link.id} style={styles.socialLinkButton}>
-                    <Icon
-                      name={link.icon} // Usando o ícone do Material Design
-                      size={24} // Tamanho do ícone
-                      color="#6200ee" // Cor do ícone (roxo)
-                    />
+                    <Icon name={link.icon} size={24} color="#6200ee" />
                     <Text style={styles.socialLinkLabel}>{link.label}</Text>
                   </TouchableOpacity>
                 ))}
@@ -399,22 +366,12 @@ export default function App() {
             <Text style={styles.sectionTitle}>Eventos Criados</Text>
             <View style={styles.eventsContainer}>
               {profileData.events.map((event) => (
-                <TouchableOpacity
-                  key={event.id}
-                  style={styles.eventCard}
-                  onPress={() => openPostDetails(event)}
-                >
-                  <Image
-                    source={event.image}
-                    style={styles.eventImage}
-                  />
-
+                <TouchableOpacity key={event.id} style={styles.eventCard} onPress={() => openPostDetails(event)}>
+                  <Image source={event.image} style={styles.eventImage} />
                   <View style={styles.eventDetails}>
                     <Text style={styles.eventTitle}>{event.title}</Text>
                     <Text style={styles.eventDate}>{event.date}</Text>
                     <Text style={styles.eventLocation}>{event.location}</Text>
-
-                    {/* Tags no canto direito */}
                     <View style={styles.cardTags2}>
                       {event.tags.map((tag, index) => (
                         <View key={index} style={styles.tag}>
@@ -428,18 +385,11 @@ export default function App() {
             </View>
 
             {/* Seção de Meus Posts */}
-             <Text style={styles.sectionTitle}>Meus posts</Text>
+            <Text style={styles.sectionTitle}>Meus posts</Text>
             <View style={styles.postsContainer}>
               {posts.map((post) => (
-                <TouchableOpacity
-                  key={post.id}
-                  style={styles.smallCard}
-                  onPress={() => openPostDetails(post)}
-                >
-                  <Image
-                    style={styles.smallCardImage}
-                    source={post.image}
-                  />
+                <TouchableOpacity key={post.id} style={styles.smallCard} onPress={() => openPostDetails(post)}>
+                  <Image style={styles.smallCardImage} source={post.image} />
                   <Text style={styles.smallCardDescription}>{post.description}</Text>
                   <View style={styles.cardTags}>
                     {post.tags.map((tag, index) => (
@@ -458,9 +408,7 @@ export default function App() {
               {profileData.reviews.map((review) => (
                 <View key={review.id} style={styles.reviewCard}>
                   <Text style={styles.reviewAuthor}>{review.author}</Text>
-                  <Text style={styles.reviewRating}>
-                    {'⭐'.repeat(review.rating)}
-                  </Text>
+                  <Text style={styles.reviewRating}>{'⭐'.repeat(review.rating)}</Text>
                   <Text style={styles.reviewComment}>{review.comment}</Text>
                 </View>
               ))}
@@ -518,13 +466,11 @@ export default function App() {
           <View style={styles.modalContent}>
             {selectedPost && (
               <>
-                <Image
-                  source={selectedPost.image}
-                  style={styles.modalImage}
-                />
+                <Image source={selectedPost.image} style={styles.modalImage} />
                 <Text style={styles.modalTitle}>{selectedPost.title || selectedPost.description}</Text>
                 <Text style={styles.modalDetails}>{selectedPost.details}</Text>
                 <Text style={styles.modalDetails}>{selectedPost.date}</Text>
+                <Text style={styles.modalDetails}>{selectedPost.location}</Text>
                 <TouchableOpacity style={styles.closeButton} onPress={closePostDetails}>
                   <Text style={styles.closeButtonText}>Fechar</Text>
                 </TouchableOpacity>
@@ -534,11 +480,70 @@ export default function App() {
         </View>
       </Modal>
 
+      {/* Modal para criar novo post/evento */}
+      <Modal
+        visible={createModalVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setCreateModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Criar Novo Post/Evento</Text>
+
+            {/* Seletor de tipo de conteúdo */}
+            <Picker
+              selectedValue={contentType}
+              style={styles.picker}
+              onValueChange={(itemValue) => setContentType(itemValue)}
+            >
+              <Picker.Item label="Postagem" value="post" />
+              <Picker.Item label="Evento" value="event" />
+            </Picker>
+
+            <TextInput
+              style={styles.input}
+              placeholder={contentType === 'post' ? "Descrição" : "Título do Evento"}
+              placeholderTextColor="#999"
+              value={newDescription}
+              onChangeText={setNewDescription}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Data (DD/MM/AAAA)"
+              placeholderTextColor="#999"
+              value={newDate}
+              onChangeText={setNewDate}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Localização"
+              placeholderTextColor="#999"
+              value={newLocation}
+              onChangeText={setNewLocation}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Tag (ex: Banda, Rock)"
+              placeholderTextColor="#999"
+              value={newTag}
+              onChangeText={setNewTag}
+            />
+            <TouchableOpacity style={styles.createButton} onPress={handleCreatePost}>
+              <Text style={styles.createButtonText}>Criar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.closeButton} onPress={() => setCreateModalVisible(false)}>
+              <Text style={styles.closeButtonText}>Cancelar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
       {/* Botão Flutuante */}
       {currentScreen !== 'Perfil' && (
         <TouchableOpacity
           style={styles.floatingButton}
-          onPress={() => Alert.alert('Adicionar', 'Adicionar postagem ou evento')}
+          onPress={() => setCreateModalVisible(true)}
         >
           <Icon name="add" size={30} color="#fff" />
         </TouchableOpacity>
@@ -910,6 +915,22 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  createButton: {
+    padding: 10,
+    backgroundColor: '#6200ee',
+    borderRadius: 5,
+    marginTop: 16,
+    alignItems: 'center',
+  },
+  createButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  picker: {
+    width: '100%',
+    marginBottom: 16,
   },
   bottomMenu: {
     flexDirection: 'row',
