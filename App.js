@@ -9,10 +9,10 @@ import {
   TextInput,
   Modal,
   Alert,
-  Picker,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Importando ícones do Material Design
 import axios from 'axios'; // Para fazer requisições HTTP
+import { RadioButton } from 'react-native-paper'; // Importando Radio Button
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Estado para controlar se o usuário está logado
@@ -491,15 +491,25 @@ export default function App() {
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Criar Novo Post/Evento</Text>
 
-            {/* Seletor de tipo de conteúdo */}
-            <Picker
-              selectedValue={contentType}
-              style={styles.picker}
-              onValueChange={(itemValue) => setContentType(itemValue)}
-            >
-              <Picker.Item label="Postagem" value="post" />
-              <Picker.Item label="Evento" value="event" />
-            </Picker>
+            {/* Radio Buttons para escolher entre Post ou Evento */}
+            <View style={styles.radioContainer}>
+              <View style={styles.radioButton}>
+                <RadioButton
+                  value="post"
+                  status={contentType === 'post' ? 'checked' : 'unchecked'}
+                  onPress={() => setContentType('post')}
+                />
+                <Text style={styles.radioLabel}>Postagem</Text>
+              </View>
+              <View style={styles.radioButton}>
+                <RadioButton
+                  value="event"
+                  status={contentType === 'event' ? 'checked' : 'unchecked'}
+                  onPress={() => setContentType('event')}
+                />
+                <Text style={styles.radioLabel}>Evento</Text>
+              </View>
+            </View>
 
             <TextInput
               style={styles.input}
@@ -928,9 +938,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  picker: {
+  radioContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     width: '100%',
     marginBottom: 16,
+  },
+  radioButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  radioLabel: {
+    marginLeft: 8,
+    fontSize: 16,
+    color: '#333',
   },
   bottomMenu: {
     flexDirection: 'row',
