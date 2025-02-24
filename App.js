@@ -49,6 +49,26 @@ export default function App() {
       location: 'São Paulo, SP',
       tags: ['Banda', 'Rock'],
     },
+    {
+      id: 3,
+      type: 'post',
+      image: require('./assets/cd.JPG'),
+      description: 'Gorilla Glue! A nova banda do momento.',
+      details: 'Conheça de perto a mais nova campeã do reality Battle of the Bands.',
+      date: '07/02/2024',
+      location: 'São Paulo, SP',
+      tags: ['Banda', 'Evento'],
+    },
+    {
+      id: 4,
+      type: 'post',
+      image: require('./assets/bc.JPG'),
+      description: 'Gravação do novo albúm.',
+      details: 'Escute nossas novas faixas!       Disponível em todas as plataformas digitais..',
+      date: '05/07/2022',
+      location: 'Icó, CE',
+      tags: ['Banda', 'Jazz'],
+    },
   ]);
 
   const [profileData, setProfileData] = useState({
@@ -63,10 +83,10 @@ export default function App() {
     events: [
       {
         id: 1,
-        title: 'CCN - Show Forró love',
+        title: 'CTN - Show Forró love',
         date: '15/12/2025',
         location: 'São Paulo, SP',
-        image: require('./assets/ab.JPG'),
+        image: require('./assets/ctn.jpg'),
         tags: ['Banda', 'Forró'],
         details: 'Requisitos de repertório mínimo (30 min).',
       },
@@ -75,7 +95,7 @@ export default function App() {
         title: 'Boate Pink - Crush Party',
         date: '20/01/2025',
         location: 'Rio de Janeiro, RJ',
-        image: require('./assets/bc.JPG'),
+        image: require('./assets/boate.jpg'),
         tags: ['Solo', 'Eletrônico'],
         details: 'Requisito mínimo de 40 min de show.',
       },
@@ -84,9 +104,18 @@ export default function App() {
         title: 'Igreja M.P. - Show Beneficente',
         date: '05/02/2025',
         location: 'Belo Horizonte, MG',
-        image: require('./assets/cd.JPG'),
+        image: require('./assets/show.jpg'),
         tags: ['Festival'],
         details: 'Show voltado para arrecadar fundos para a campanha Amigos do Bem.',
+      },
+      {
+        id: 4,
+        title: 'Pampas Grill - Cantor para Noite',
+        date: '25/07/2025',
+        location: 'Brasília, DF',
+        image: require('./assets/carne.jpg'),
+        tags: ['Solo', 'Country'],
+        details: 'Valor de couvert R$ 10,00 por cliente.',
       },
     ],
     reviews: [
