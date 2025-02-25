@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Text,
   StyleSheet,
@@ -10,22 +10,23 @@ import {
   Modal,
   Alert,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons'; // Importando ícones do Material Design
-import axios from 'axios'; // Para fazer requisições HTTP
+import Icon from 'react-native-vector-icons/MaterialIcons'; // Importando ícones do Material Design
+import axios from 'axios'; // Para fazer requisições HTTP
 import { RadioButton } from 'react-native-paper'; // Importando Radio Button
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Estado para controlar se o usuário está logado
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Estado para controlar se o usuário está logado
+  const [showSplash, setShowSplash] = useState(false); // Estado para controlar a exibição da splash screen
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [currentScreen, setCurrentScreen] = useState('Home'); // Estado para controlar a tela atual
   const [selectedPost, setSelectedPost] = useState(null); // Estado para armazenar o post selecionado
   const [modalVisible, setModalVisible] = useState(false); // Estado para controlar a visibilidade do modal
   const [searchQuery, setSearchQuery] = useState(''); // Estado para armazenar a busca
-  const [createModalVisible, setCreateModalVisible] = useState(false); // Estado para controlar o modal de criação
-  const [newDescription, setNewDescription] = useState(''); // Estado para a descrição do novo post/evento
+  const [createModalVisible, setCreateModalVisible] = useState(false); // Estado para controlar o modal de criação
+  const [newDescription, setNewDescription] = useState(''); // Estado para a descrição do novo post/evento
   const [newDate, setNewDate] = useState(''); // Estado para a data do novo post/evento
-  const [newLocation, setNewLocation] = useState(''); // Estado para a localização do novo post/evento
+  const [newLocation, setNewLocation] = useState(''); // Estado para a localização do novo post/evento
   const [newTag, setNewTag] = useState(''); // Estado para a tag do novo post/evento
   const [contentType, setContentType] = useState('post'); // Estado para escolher entre post ou evento
   const [posts, setPosts] = useState([ // Estado para gerenciar a lista de posts
@@ -33,20 +34,20 @@ export default function App() {
       id: 1,
       type: 'post',
       image: require('./assets/de.jpg'),
-      description: 'O Festival de Verão foi incrível!',
+      description: 'O Festival de Verão foi incrível!',
       details: 'Foi um show emocionante com mais de 50 mil pessoas presentes. Reggaezim do Cera arrasou no palco principal!',
       date: '15/12/2023',
-      location: 'São Paulo, SP',
+      location: 'São Paulo, SP',
       tags: ['Banda', 'Rock'],
     },
     {
       id: 2,
       type: 'post',
       image: require('./assets/fg.jpg'),
-      description: 'Novo single lançado! Confiram!',
-      details: 'Ouça agora o novo single "Vibração Cósmica" nas principais plataformas de streaming.',
+      description: 'Novo single lançado! Confiram!',
+      details: 'Ouça agora o novo single "Vibração Cósmica" nas principais plataformas de streaming.',
       date: '15/12/2023',
-      location: 'São Paulo, SP',
+      location: 'São Paulo, SP',
       tags: ['Banda', 'Rock'],
     },
     {
@@ -54,41 +55,41 @@ export default function App() {
       type: 'post',
       image: require('./assets/cd.JPG'),
       description: 'Gorilla Glue! A nova banda do momento.',
-      details: 'Conheça de perto a mais nova campeã do reality Battle of the Bands.',
+      details: 'Conheça de perto a mais nova campeã do reality Battle of the Bands.',
       date: '07/02/2024',
-      location: 'São Paulo, SP',
+      location: 'São Paulo, SP',
       tags: ['Banda', 'Evento'],
     },
     {
       id: 4,
       type: 'post',
       image: require('./assets/bc.JPG'),
-      description: 'Gravação do novo albúm.',
-      details: 'Escute nossas novas faixas!       Disponível em todas as plataformas digitais..',
+      description: 'Gravação do novo albúm.',
+      details: 'Escute nossas novas faixas!       Disponível em todas as plataformas digitais..',
       date: '05/07/2022',
-      location: 'Icó, CE',
+      location: 'Icó, CE',
       tags: ['Banda', 'Jazz'],
     },
   ]);
 
   const [profileData, setProfileData] = useState({
     name: 'Carlos Eventos',
-    bio: 'Produtor de eventos com mais de 10 anos de experiência, especializado em festivais e shows ao vivo.',
+    bio: 'Produtor de eventos com mais de 10 anos de experiência, especializado em festivais e shows ao vivo.',
     profileImage: require('./assets/image.png'), // Mock da imagem do perfil
     socialLinks: [
-      { id: 1, icon: 'language', label: 'Site' }, // Ícone do Material Design para Site
-      { id: 2, icon: 'camera-alt', label: 'Instagram' }, // Ícone do Material Design para Instagram
-      { id: 3, icon: 'email', label: 'Email' }, // Ícone do Material Design para Email
+      { id: 1, icon: 'language', label: 'Site' }, // Ícone do Material Design para Site
+      { id: 2, icon: 'camera-alt', label: 'Instagram' }, // Ícone do Material Design para Instagram
+      { id: 3, icon: 'email', label: 'Email' }, // Ícone do Material Design para Email
     ],
     events: [
       {
         id: 1,
-        title: 'CTN - Show Forró love',
+        title: 'CTN - Show Forró love',
         date: '15/12/2025',
-        location: 'São Paulo, SP',
+        location: 'São Paulo, SP',
         image: require('./assets/ctn.jpg'),
-        tags: ['Banda', 'Forró'],
-        details: 'Requisitos de repertório mínimo (30 min).',
+        tags: ['Banda', 'Forró'],
+        details: 'Requisitos de repertório mínimo (30 min).',
       },
       {
         id: 2,
@@ -96,8 +97,8 @@ export default function App() {
         date: '20/01/2025',
         location: 'Rio de Janeiro, RJ',
         image: require('./assets/boate.jpg'),
-        tags: ['Solo', 'Eletrônico'],
-        details: 'Requisito mínimo de 40 min de show.',
+        tags: ['Solo', 'Eletrônico'],
+        details: 'Requisito mínimo de 40 min de show.',
       },
       {
         id: 3,
@@ -112,7 +113,7 @@ export default function App() {
         id: 4,
         title: 'Pampas Grill - Cantor para Noite',
         date: '25/07/2025',
-        location: 'Brasília, DF',
+        location: 'Brasília, DF',
         image: require('./assets/carne.jpg'),
         tags: ['Solo', 'Country'],
         details: 'Valor de couvert R$ 10,00 por cliente.',
@@ -121,9 +122,9 @@ export default function App() {
     reviews: [
       {
         id: 1,
-        author: 'João Silva',
+        author: 'João Silva',
         rating: 5,
-        comment: 'Eventos incríveis! Tudo foi muito bem organizado.',
+        comment: 'Eventos incríveis! Tudo foi muito bem organizado.',
       },
       {
         id: 2,
@@ -135,12 +136,12 @@ export default function App() {
         id: 3,
         author: 'Pedro Oliveira',
         rating: 5,
-        comment: 'Melhor evento que já fui! Parabéns à equipe.',
+        comment: 'Melhor evento que já fui! Parabéns à equipe.',
       },
     ],
   });
 
-  // Função para fazer login com a API reqres.in
+  // Função para fazer login com a API reqres.in
   const handleLogin = async () => {
     try {
       const response = await axios.post('https://reqres.in/api/login', {
@@ -150,27 +151,39 @@ export default function App() {
 
       if (response.data.token) {
         setIsLoggedIn(true); // Define o estado como logado
+        setShowSplash(true); // Mostra a splash screen
       } else {
-        Alert.alert('Erro', 'Credenciais inválidas');
+        Alert.alert('Erro', 'Credenciais inválidas');
       }
     } catch (error) {
       Alert.alert('Erro', 'Ocorreu um erro ao tentar fazer login');
     }
   };
 
-  // Função para abrir o modal com os detalhes do post
+  // Efeito para esconder a splash screen após 3 segundos
+  useEffect(() => {
+    if (showSplash) {
+      const timer = setTimeout(() => {
+        setShowSplash(false);
+      }, 2000); // 2 segundos
+
+      return () => clearTimeout(timer);
+    }
+  }, [showSplash]);
+
+  // Função para abrir o modal com os detalhes do post
   const openPostDetails = (post) => {
     setSelectedPost(post); // Define o post selecionado
     setModalVisible(true); // Abre o modal
   };
 
-  // Função para fechar o modal
+  // Função para fechar o modal
   const closePostDetails = () => {
     setModalVisible(false); // Fecha o modal
     setSelectedPost(null); // Limpa o post selecionado
   };
 
-  // Função para criar um novo post/evento
+  // Função para criar um novo post/evento
   const handleCreatePost = () => {
     if (!newDescription || !newDate || !newLocation || !newTag) {
       Alert.alert('Erro', 'Preencha todos os campos');
@@ -188,7 +201,7 @@ export default function App() {
         location: newLocation,
         tags: [newTag],
       };
-      setPosts([...posts, newPost]); // Adiciona o novo post à lista de posts
+      setPosts([...posts, newPost]); // Adiciona o novo post à lista de posts
     } else if (contentType === 'event') {
       const newEvent = {
         id: profileData.events.length + 1, // Gera um novo ID
@@ -201,7 +214,7 @@ export default function App() {
       };
       setProfileData({
         ...profileData,
-        events: [...profileData.events, newEvent], // Adiciona o novo evento à lista de eventos
+        events: [...profileData.events, newEvent], // Adiciona o novo evento à lista de eventos
       });
     }
 
@@ -210,10 +223,10 @@ export default function App() {
     setNewDate('');
     setNewLocation('');
     setNewTag('');
-    setContentType('post'); // Reseta o tipo de conteúdo para "post"
+    setContentType('post'); // Reseta o tipo de conteúdo para "post"
   };
 
-  // Função para renderizar o conteúdo com base na tela atual
+  // Função para renderizar o conteúdo com base na tela atual
   const renderContent = () => {
     switch (currentScreen) {
       case 'Home':
@@ -239,7 +252,7 @@ export default function App() {
               </View>
             </View>
 
-            {/* Seção de Posts em Destaque */}
+            {/* Seção de Posts em Destaque */}
             <Text style={styles.sectionTitle}>Postagens em Destaque</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.highlightsContainer}>
               {posts.map((post) => (
@@ -257,7 +270,7 @@ export default function App() {
               ))}
             </ScrollView>
 
-            {/* Seção de Eventos */}
+            {/* Seção de Eventos */}
             <Text style={styles.sectionTitle}>Eventos</Text>
             <View style={styles.eventsContainer}>
               {profileData.events.map((event) => (
@@ -371,7 +384,7 @@ export default function App() {
       case 'Perfil':
         return (
           <ScrollView style={styles.container}>
-            {/* Cabeçalho do Perfil */}
+            {/* Cabeçalho do Perfil */}
             <View style={styles.profileHeader}>
               <Image
                 source={profileData.profileImage}
@@ -391,7 +404,7 @@ export default function App() {
               </View>
             </View>
 
-            {/* Seção de Eventos Criados */}
+            {/* Seção de Eventos Criados */}
             <Text style={styles.sectionTitle}>Eventos Criados</Text>
             <View style={styles.eventsContainer}>
               {profileData.events.map((event) => (
@@ -413,7 +426,7 @@ export default function App() {
               ))}
             </View>
 
-            {/* Seção de Meus Posts */}
+            {/* Seção de Meus Posts */}
             <Text style={styles.sectionTitle}>Meus posts</Text>
             <View style={styles.postsContainer}>
               {posts.map((post) => (
@@ -431,8 +444,8 @@ export default function App() {
               ))}
             </View>
 
-            {/* Seção de Avaliações */}
-            <Text style={styles.sectionTitle}>Avaliações</Text>
+            {/* Seção de Avaliações */}
+            <Text style={styles.sectionTitle}>Avaliações</Text>
             <View style={styles.reviewsContainer}>
               {profileData.reviews.map((review) => (
                 <View key={review.id} style={styles.reviewCard}>
@@ -449,7 +462,7 @@ export default function App() {
     }
   };
 
-  // Se o usuário não estiver logado, exibe a tela de login
+  // Se o usuário não estiver logado, exibe a tela de login
   if (!isLoggedIn) {
     return (
       <View style={styles.loginContainer}>
@@ -479,9 +492,21 @@ export default function App() {
     );
   }
 
+  // Se a splash screen estiver visível, exibe a splash screen
+  if (showSplash) {
+    return (
+      <View style={styles.splashContainer}>
+        <Image
+          source={require('./assets/logoBlack.png')} // Imagem da splash screen
+          style={styles.splashImage}
+        />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.fullContainer}>
-      {/* Conteúdo principal */}
+      {/* Conteúdo principal */}
       {renderContent()}
 
       {/* Modal para detalhes do evento */}
@@ -542,7 +567,7 @@ export default function App() {
 
             <TextInput
               style={styles.input}
-              placeholder={contentType === 'post' ? "Descrição" : "Título do Evento"}
+              placeholder={contentType === 'post' ? "Descrição" : "Título do Evento"}
               placeholderTextColor="#999"
               value={newDescription}
               onChangeText={setNewDescription}
@@ -556,7 +581,7 @@ export default function App() {
             />
             <TextInput
               style={styles.input}
-              placeholder="Localização"
+              placeholder="Localização"
               placeholderTextColor="#999"
               value={newLocation}
               onChangeText={setNewLocation}
@@ -578,7 +603,7 @@ export default function App() {
         </View>
       </Modal>
 
-      {/* Botão Flutuante */}
+      {/* Botão Flutuante */}
       {currentScreen !== 'Perfil' && (
         <TouchableOpacity
           style={styles.floatingButton}
@@ -588,7 +613,7 @@ export default function App() {
         </TouchableOpacity>
       )}
 
-      {/* Barra de Menu Inferior com Ícones do Material Design */}
+      {/* Barra de Menu Inferior com Ícones do Material Design */}
       <View style={styles.bottomMenu}>
         <TouchableOpacity
           style={styles.menuButton}
@@ -681,6 +706,19 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+
+  // Estilos da splash screen
+  splashContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  splashImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
   },
 
   // Estilos da tela do artista
