@@ -1,3 +1,5 @@
+![Splash Screen](./assets/logoBlack.png)
+
 # Palco aberto
 Aplicativo onde produtores de eventos e donos de casas de show e estabelecimentos possam se conectar
 
