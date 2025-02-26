@@ -29,6 +29,23 @@ export default function App() {
   const [newLocation, setNewLocation] = useState(''); // Estado para a localização do novo post/evento
   const [newTag, setNewTag] = useState(''); // Estado para a tag do novo post/evento
   const [contentType, setContentType] = useState('post'); // Estado para escolher entre post ou evento
+  const [messages, setMessages] = useState([ // Estado para gerenciar a lista de mensagens
+    {
+      id: 1,
+      sender: 'Carlos Eventos',
+      message: 'Olá, gostaria de saber mais sobre o evento.',
+      timestamp: '15/12/2023 10:00',
+    },
+    {
+      id: 2,
+      sender: 'Maria Souza',
+      message: 'Você pode me enviar mais detalhes?',
+      timestamp: '15/12/2023 10:05',
+    },
+  ]);
+  const [selectedMessage, setSelectedMessage] = useState(null); // Estado para armazenar a mensagem selecionada
+  const [messageModalVisible, setMessageModalVisible] = useState(false); // Estado para controlar a visibilidade do modal de mensagens
+
   const [posts, setPosts] = useState([ // Estado para gerenciar a lista de posts
     {
       id: 1,
@@ -181,6 +198,18 @@ export default function App() {
   const closePostDetails = () => {
     setModalVisible(false); // Fecha o modal
     setSelectedPost(null); // Limpa o post selecionado
+  };
+
+  // Função para abrir o modal com os detalhes da mensagem
+  const openMessageDetails = (message) => {
+    setSelectedMessage(message); // Define a mensagem selecionada
+    setMessageModalVisible(true); // Abre o modal
+  };
+
+  // Função para fechar o modal de mensagens
+  const closeMessageDetails = () => {
+    setMessageModalVisible(false); // Fecha o modal
+    setSelectedMessage(null); // Limpa a mensagem selecionada
   };
 
   // Função para criar um novo post/evento
@@ -457,6 +486,42 @@ export default function App() {
             </View>
           </ScrollView>
         );
+      case 'Mensagens':
+        return (
+          <ScrollView style={styles.container}>
+            {/* Menu Superior */}
+            <Image
+              source={require('./assets/logoBlakv2.png')} // Mock da logo
+              style={styles.logoPaginas}
+            />
+            <View style={styles.topMenu}>
+              <View style={styles.searchContainer}>
+                <TextInput
+                  style={styles.searchInput}
+                  placeholder="Buscar mensagens..."
+                  placeholderTextColor="#999"
+                  value={searchQuery}
+                  onChangeText={setSearchQuery}
+                />
+                <TouchableOpacity style={styles.searchButton}>
+                  <Icon name="search" size={24} color="#6200ee" />
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            {/* Lista de Mensagens */}
+            <Text style={styles.sectionTitle}>Mensagens</Text>
+            <View style={styles.messagesContainer}>
+              {messages.map((message) => (
+                <TouchableOpacity key={message.id} style={styles.messageCard} onPress={() => openMessageDetails(message)}>
+                  <Text style={styles.messageSender}>{message.sender}</Text>
+                  <Text style={styles.messageText}>{message.message}</Text>
+                  <Text style={styles.messageTimestamp}>{message.timestamp}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </ScrollView>
+        );
       default:
         return null;
     }
@@ -526,6 +591,29 @@ export default function App() {
                 <Text style={styles.modalDetails}>{selectedPost.date}</Text>
                 <Text style={styles.modalDetails}>{selectedPost.location}</Text>
                 <TouchableOpacity style={styles.closeButton} onPress={closePostDetails}>
+                  <Text style={styles.closeButtonText}>Fechar</Text>
+                </TouchableOpacity>
+              </>
+            )}
+          </View>
+        </View>
+      </Modal>
+
+      {/* Modal para detalhes da mensagem */}
+      <Modal
+        visible={messageModalVisible}
+        transparent={true}
+        animationType="none"
+        onRequestClose={closeMessageDetails}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            {selectedMessage && (
+              <>
+                <Text style={styles.modalTitle}>{selectedMessage.sender}</Text>
+                <Text style={styles.modalDetails}>{selectedMessage.message}</Text>
+                <Text style={styles.modalDetails}>{selectedMessage.timestamp}</Text>
+                <TouchableOpacity style={styles.closeButton} onPress={closeMessageDetails}>
                   <Text style={styles.closeButtonText}>Fechar</Text>
                 </TouchableOpacity>
               </>
@@ -604,7 +692,7 @@ export default function App() {
       </Modal>
 
       {/* Botão Flutuante */}
-      {currentScreen !== 'Perfil' && (
+      {currentScreen !== 'Perfil' && currentScreen !== 'Mensagens' && (
         <TouchableOpacity
           style={styles.floatingButton}
           onPress={() => setCreateModalVisible(true)}
@@ -654,6 +742,20 @@ export default function App() {
           />
           <Text style={currentScreen === 'Propostas' ? styles.menuButtonActive : styles.menuButtonText}>
             Eventos
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => setCurrentScreen('Mensagens')}
+        >
+          <Icon
+            name="message"
+            size={24}
+            color={currentScreen === 'Mensagens' ? '#6200ee' : '#666'}
+          />
+          <Text style={currentScreen === 'Mensagens' ? styles.menuButtonActive : styles.menuButtonText}>
+            Mensagens
           </Text>
         </TouchableOpacity>
 
@@ -1058,5 +1160,34 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
+  },
+  messagesContainer: {
+    marginBottom: 16,
+  },
+  messageCard: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 16,
+    marginBottom: 16,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  messageSender: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 8,
+  },
+  messageText: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 8,
+  },
+  messageTimestamp: {
+    fontSize: 12,
+    color: '#999',
   },
 });
