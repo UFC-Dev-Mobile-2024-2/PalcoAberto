@@ -276,7 +276,7 @@ export default function App() {
                   onChangeText={setSearchQuery}
                 />
                 <TouchableOpacity style={styles.searchButton}>
-                  <Icon name="search" size={24} color="#6200ee" />
+                  <Icon name="search" size={24} color="#007BFF" />
                 </TouchableOpacity>
               </View>
             </View>
@@ -340,7 +340,7 @@ export default function App() {
                   onChangeText={setSearchQuery}
                 />
                 <TouchableOpacity style={styles.searchButton}>
-                  <Icon name="search" size={24} color="#6200ee" />
+                  <Icon name="search" size={24} color="#007BFF" />
                 </TouchableOpacity>
               </View>
             </View>
@@ -382,7 +382,7 @@ export default function App() {
                   onChangeText={setSearchQuery}
                 />
                 <TouchableOpacity style={styles.searchButton}>
-                  <Icon name="search" size={24} color="#6200ee" />
+                  <Icon name="search" size={24} color="#007BFF" />
                 </TouchableOpacity>
               </View>
             </View>
@@ -426,7 +426,7 @@ export default function App() {
               <View style={styles.socialLinksContainer}>
                 {profileData.socialLinks.map((link) => (
                   <TouchableOpacity key={link.id} style={styles.socialLinkButton}>
-                    <Icon name={link.icon} size={24} color="#6200ee" />
+                    <Icon name={link.icon} size={24} color="#007BFF" />
                     <Text style={styles.socialLinkLabel}>{link.label}</Text>
                   </TouchableOpacity>
                 ))}
@@ -504,7 +504,7 @@ export default function App() {
                   onChangeText={setSearchQuery}
                 />
                 <TouchableOpacity style={styles.searchButton}>
-                  <Icon name="search" size={24} color="#6200ee" />
+                  <Icon name="search" size={24} color="#007BFF" />
                 </TouchableOpacity>
               </View>
             </View>
@@ -710,7 +710,7 @@ export default function App() {
           <Icon
             name="home"
             size={24}
-            color={currentScreen === 'Home' ? '#6200ee' : '#666'}
+            color={currentScreen === 'Home' ? '#007BFF' : '#666'}
           />
           <Text style={currentScreen === 'Home' ? styles.menuButtonActive : styles.menuButtonText}>
             Home
@@ -724,7 +724,7 @@ export default function App() {
           <Icon
             name="article"
             size={24}
-            color={currentScreen === 'Postagens' ? '#6200ee' : '#666'}
+            color={currentScreen === 'Postagens' ? '#007BFF' : '#666'}
           />
           <Text style={currentScreen === 'Postagens' ? styles.menuButtonActive : styles.menuButtonText}>
             Postagens
@@ -738,7 +738,7 @@ export default function App() {
           <Icon
             name="assignment"
             size={24}
-            color={currentScreen === 'Propostas' ? '#6200ee' : '#666'}
+            color={currentScreen === 'Propostas' ? '#007BFF' : '#666'}
           />
           <Text style={currentScreen === 'Propostas' ? styles.menuButtonActive : styles.menuButtonText}>
             Eventos
@@ -752,7 +752,7 @@ export default function App() {
           <Icon
             name="message"
             size={24}
-            color={currentScreen === 'Mensagens' ? '#6200ee' : '#666'}
+            color={currentScreen === 'Mensagens' ? '#007BFF' : '#666'}
           />
           <Text style={currentScreen === 'Mensagens' ? styles.menuButtonActive : styles.menuButtonText}>
             Mensagens
@@ -766,7 +766,7 @@ export default function App() {
           <Icon
             name="person"
             size={24}
-            color={currentScreen === 'Perfil' ? '#6200ee' : '#666'}
+            color={currentScreen === 'Perfil' ? '#007BFF' : '#666'}
           />
           <Text style={currentScreen === 'Perfil' ? styles.menuButtonActive : styles.menuButtonText}>
             Perfil
@@ -799,7 +799,7 @@ const styles = StyleSheet.create({
   loginButton: {
     width: '80%',
     height: 40,
-    backgroundColor: '#6200ee',
+    backgroundColor: '#007BFF',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
@@ -977,7 +977,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   tag: {
-    backgroundColor: '#6200ee',
+    backgroundColor: '#FF0062',
     borderRadius: 12,
     paddingVertical: 4,
     paddingHorizontal: 8,
@@ -1086,7 +1086,7 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     padding: 10,
-    backgroundColor: '#6200ee',
+    backgroundColor: '#FF0062',
     borderRadius: 5,
     marginTop: 16,
   },
@@ -1097,7 +1097,7 @@ const styles = StyleSheet.create({
   },
   createButton: {
     padding: 10,
-    backgroundColor: '#6200ee',
+    backgroundColor: '#007BFF',
     borderRadius: 5,
     marginTop: 16,
     alignItems: 'center',
@@ -1141,7 +1141,7 @@ const styles = StyleSheet.create({
   },
   menuButtonActive: {
     fontSize: 12,
-    color: '#6200ee',
+    color: '#007BFF',
     fontWeight: 'bold',
     marginTop: 4,
   },
@@ -1149,7 +1149,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 80,
     right: 20,
-    backgroundColor: '#6200ee',
+    backgroundColor: '#007BFF',
     width: 56,
     height: 56,
     borderRadius: 28,
