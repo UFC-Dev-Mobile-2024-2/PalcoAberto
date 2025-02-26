@@ -513,7 +513,7 @@ export default function App() {
       <Modal
         visible={modalVisible}
         transparent={true}
-        animationType="slide"
+        animationType="none"
         onRequestClose={closePostDetails}
       >
         <View style={styles.modalOverlay}>
@@ -538,7 +538,7 @@ export default function App() {
       <Modal
         visible={createModalVisible}
         transparent={true}
-        animationType="slide"
+        animationType="none"
         onRequestClose={() => setCreateModalVisible(false)}
       >
         <View style={styles.modalOverlay}>
@@ -958,9 +958,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
-    width: '80%',
+    width: '100%',
+    height: '100%',
     backgroundColor: '#fff',
-    borderRadius: 10,
     padding: 20,
     alignItems: 'center',
   },
