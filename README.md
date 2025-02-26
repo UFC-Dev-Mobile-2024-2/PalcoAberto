@@ -3,7 +3,7 @@ Aplicativo onde produtores de eventos e donos de casas de show e estabelecimento
 
 
 ## Equipe
-- Francisco Moreira (Projeto IV e PIM)
+- (PO) Francisco Moreira (Projeto IV e PIM)
 - Gabriel Okidoi (PIM)
 - Guilherme Gamal (Projeto IV)
 - Lázaro Freitas (PIM)
