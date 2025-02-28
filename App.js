@@ -1,35 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Text,
-  StyleSheet,
   View,
   ScrollView,
-  Image,
-  TouchableOpacity,
-  TextInput,
   Modal,
   Alert,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Image,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons'; // Importando ícones do Material Design
-import axios from 'axios'; // Para fazer requisições HTTP
-import { RadioButton } from 'react-native-paper'; // Importando Radio Button
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { RadioButton } from 'react-native-paper';
+import axios from 'axios';
+import { Header } from './components/Header';
+import { PostCard } from './components/PostCard';
+import { EventCard } from './components/EventCard';
+import { CreatePostModal } from './components/CreatePostModal';
+import { styles } from './styles/styles';
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Estado para controlar se o usuário está logado
-  const [showSplash, setShowSplash] = useState(false); // Estado para controlar a exibição da splash screen
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showSplash, setShowSplash] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [currentScreen, setCurrentScreen] = useState('Home'); // Estado para controlar a tela atual
-  const [selectedPost, setSelectedPost] = useState(null); // Estado para armazenar o post selecionado
-  const [modalVisible, setModalVisible] = useState(false); // Estado para controlar a visibilidade do modal
-  const [searchQuery, setSearchQuery] = useState(''); // Estado para armazenar a busca
-  const [createModalVisible, setCreateModalVisible] = useState(false); // Estado para controlar o modal de criação
-  const [newDescription, setNewDescription] = useState(''); // Estado para a descrição do novo post/evento
-  const [newDate, setNewDate] = useState(''); // Estado para a data do novo post/evento
-  const [newLocation, setNewLocation] = useState(''); // Estado para a localização do novo post/evento
-  const [newTag, setNewTag] = useState(''); // Estado para a tag do novo post/evento
-  const [contentType, setContentType] = useState('post'); // Estado para escolher entre post ou evento
-  const [messages, setMessages] = useState([ // Estado para gerenciar a lista de mensagens
+  const [currentScreen, setCurrentScreen] = useState('Home');
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [createModalVisible, setCreateModalVisible] = useState(false);
+  const [newDescription, setNewDescription] = useState('');
+  const [newDate, setNewDate] = useState('');
+  const [newLocation, setNewLocation] = useState('');
+  const [newTag, setNewTag] = useState('');
+  const [contentType, setContentType] = useState('post');
+  const [messages, setMessages] = useState([
     {
       id: 1,
       sender: 'Carlos Eventos',
@@ -43,10 +47,10 @@ export default function App() {
       timestamp: '15/12/2023 10:05',
     },
   ]);
-  const [selectedMessage, setSelectedMessage] = useState(null); // Estado para armazenar a mensagem selecionada
-  const [messageModalVisible, setMessageModalVisible] = useState(false); // Estado para controlar a visibilidade do modal de mensagens
+  const [selectedMessage, setSelectedMessage] = useState(null);
+  const [messageModalVisible, setMessageModalVisible] = useState(false);
 
-  const [posts, setPosts] = useState([ // Estado para gerenciar a lista de posts
+  const [posts, setPosts] = useState([
     {
       id: 1,
       type: 'post',
@@ -67,7 +71,7 @@ export default function App() {
       location: 'São Paulo, SP',
       tags: ['Banda', 'Rock'],
     },
-    {
+     {
       id: 3,
       type: 'post',
       image: require('./assets/cd.jpg'),
@@ -92,11 +96,11 @@ export default function App() {
   const [profileData, setProfileData] = useState({
     name: 'Carlos Eventos',
     bio: 'Produtor de eventos com mais de 10 anos de experiência, especializado em festivais e shows ao vivo.',
-    profileImage: require('./assets/image.png'), // Mock da imagem do perfil
+    profileImage: require('./assets/image.png'),
     socialLinks: [
-      { id: 1, icon: 'language', label: 'Site' }, // Ícone do Material Design para Site
-      { id: 2, icon: 'camera-alt', label: 'Instagram' }, // Ícone do Material Design para Instagram
-      { id: 3, icon: 'email', label: 'Email' }, // Ícone do Material Design para Email
+      { id: 1, icon: 'language', label: 'Site' },
+      { id: 2, icon: 'camera-alt', label: 'Instagram' },
+      { id: 3, icon: 'email', label: 'Email' },
     ],
     events: [
       {
@@ -149,16 +153,10 @@ export default function App() {
         rating: 4,
         comment: 'Adorei o festival, mas a fila para o banheiro estava longa.',
       },
-      {
-        id: 3,
-        author: 'Pedro Oliveira',
-        rating: 5,
-        comment: 'Melhor evento que já fui! Parabéns à equipe.',
-      },
     ],
   });
 
-  // Função para fazer login com a API reqres.in
+  // Função para fazer login
   const handleLogin = async () => {
     try {
       const response = await axios.post('https://reqres.in/api/login', {
@@ -167,8 +165,8 @@ export default function App() {
       });
 
       if (response.data.token) {
-        setIsLoggedIn(true); // Define o estado como logado
-        setShowSplash(true); // Mostra a splash screen
+        setIsLoggedIn(true);
+        setShowSplash(true);
       } else {
         Alert.alert('Erro', 'Credenciais inválidas');
       }
@@ -177,147 +175,78 @@ export default function App() {
     }
   };
 
-  // Efeito para esconder a splash screen após 3 segundos
+  // Efeito para esconder a splash screen
   useEffect(() => {
     if (showSplash) {
       const timer = setTimeout(() => {
         setShowSplash(false);
-      }, 2000); // 2 segundos
+      }, 2000);
 
       return () => clearTimeout(timer);
     }
   }, [showSplash]);
 
-  // Função para abrir o modal com os detalhes do post
+  // Função para abrir detalhes do post/evento
   const openPostDetails = (post) => {
-    setSelectedPost(post); // Define o post selecionado
-    setModalVisible(true); // Abre o modal
+    setSelectedPost(post);
+    setModalVisible(true);
   };
 
-  // Função para fechar o modal
+  // Função para fechar o modal de detalhes
   const closePostDetails = () => {
-    setModalVisible(false); // Fecha o modal
-    setSelectedPost(null); // Limpa o post selecionado
+    setModalVisible(false);
+    setSelectedPost(null);
   };
 
-  // Função para abrir o modal com os detalhes da mensagem
-  const openMessageDetails = (message) => {
-    setSelectedMessage(message); // Define a mensagem selecionada
-    setMessageModalVisible(true); // Abre o modal
-  };
-
-  // Função para fechar o modal de mensagens
-  const closeMessageDetails = () => {
-    setMessageModalVisible(false); // Fecha o modal
-    setSelectedMessage(null); // Limpa a mensagem selecionada
-  };
-
-  // Função para criar um novo post/evento
-  const handleCreatePost = () => {
-    if (!newDescription || !newDate || !newLocation || !newTag) {
-      Alert.alert('Erro', 'Preencha todos os campos');
-      return;
-    }
-
-    if (contentType === 'post') {
+  // Função para criar um novo post/evento
+  const handleCreatePost = ({ description, date, location, tag, type }) => {
+    if (type === 'post') {
       const newPost = {
-        id: posts.length + 1, // Gera um novo ID
+        id: posts.length + 1,
         type: 'post',
-        image: require('./assets/de.jpg'), // Mock da imagem
-        description: newDescription,
+        image: require('./assets/de.jpg'),
+        description,
         details: 'Detalhes do novo post',
-        date: newDate,
-        location: newLocation,
-        tags: [newTag],
+        date,
+        location,
+        tags: [tag],
       };
-      setPosts([...posts, newPost]); // Adiciona o novo post à lista de posts
-    } else if (contentType === 'event') {
+      setPosts([...posts, newPost]);
+    } else if (type === 'event') {
       const newEvent = {
-        id: profileData.events.length + 1, // Gera um novo ID
-        title: newDescription,
-        date: newDate,
-        location: newLocation,
-        image: require('./assets/de.jpg'), // Mock da imagem
-        tags: [newTag],
+        id: profileData.events.length + 1,
+        title: description,
+        date,
+        location,
+        image: require('./assets/de.jpg'),
+        tags: [tag],
         details: 'Detalhes do novo evento',
       };
       setProfileData({
         ...profileData,
-        events: [...profileData.events, newEvent], // Adiciona o novo evento à lista de eventos
+        events: [...profileData.events, newEvent],
       });
     }
-
-    setCreateModalVisible(false); // Fecha o modal
-    setNewDescription(''); // Limpa os campos
-    setNewDate('');
-    setNewLocation('');
-    setNewTag('');
-    setContentType('post'); // Reseta o tipo de conteúdo para "post"
+    setCreateModalVisible(false);
   };
 
-  // Função para renderizar o conteúdo com base na tela atual
+  // Renderiza o conteúdo com base na tela atual
   const renderContent = () => {
     switch (currentScreen) {
       case 'Home':
         return (
           <ScrollView style={styles.container}>
-            {/* Menu Superior */}
-            <Image
-              source={require('./assets/logoBlakv2.png')} // Mock da logo
-              style={styles.logoPaginas}
-            />
-            <View style={styles.topMenu}>
-              <View style={styles.searchContainer}>
-                <TextInput
-                  style={styles.searchInput}
-                  placeholder="Buscar posts ou eventos..."
-                  placeholderTextColor="#999"
-                  value={searchQuery}
-                  onChangeText={setSearchQuery}
-                />
-                <TouchableOpacity style={styles.searchButton}>
-                  <Icon name="search" size={24} color="#007BFF" />
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            {/* Seção de Posts em Destaque */}
+            <Header showSearch={true} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
             <Text style={styles.sectionTitle}>Postagens em Destaque</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.highlightsContainer}>
               {posts.map((post) => (
-                <TouchableOpacity key={post.id} style={styles.highlightCard} onPress={() => openPostDetails(post)}>
-                  <Image style={styles.highlightImage} source={post.image} />
-                  <Text style={styles.highlightDescription}>{post.description}</Text>
-                  <View style={styles.cardTags}>
-                    {post.tags.map((tag, index) => (
-                      <View key={index} style={styles.tag}>
-                        <Text style={styles.tagText}>{tag}</Text>
-                      </View>
-                    ))}
-                  </View>
-                </TouchableOpacity>
+                <PostCard key={post.id} post={post} onPress={() => openPostDetails(post)} />
               ))}
             </ScrollView>
-
-            {/* Seção de Eventos */}
             <Text style={styles.sectionTitle}>Eventos</Text>
             <View style={styles.eventsContainer}>
               {profileData.events.map((event) => (
-                <TouchableOpacity key={event.id} style={styles.eventCard} onPress={() => openPostDetails(event)}>
-                  <Image source={event.image} style={styles.eventImage} />
-                  <View style={styles.eventDetails}>
-                    <Text style={styles.eventTitle}>{event.title}</Text>
-                    <Text style={styles.eventDate}>{event.date}</Text>
-                    <Text style={styles.eventLocation}>{event.location}</Text>
-                    <View style={styles.cardTags2}>
-                      {event.tags.map((tag, index) => (
-                        <View key={index} style={styles.tag}>
-                          <Text style={styles.tagText}>{tag}</Text>
-                        </View>
-                      ))}
-                    </View>
-                  </View>
-                </TouchableOpacity>
+                <EventCard key={event.id} event={event} onPress={() => openPostDetails(event)} />
               ))}
             </View>
           </ScrollView>
@@ -325,41 +254,11 @@ export default function App() {
       case 'Postagens':
         return (
           <ScrollView style={styles.container}>
-            {/* Menu Superior */}
-            <Image
-              source={require('./assets/logoBlakv2.png')} // Mock da logo
-              style={styles.logoPaginas}
-            />
-            <View style={styles.topMenu}>
-              <View style={styles.searchContainer}>
-                <TextInput
-                  style={styles.searchInput}
-                  placeholder="Buscar posts..."
-                  placeholderTextColor="#999"
-                  value={searchQuery}
-                  onChangeText={setSearchQuery}
-                />
-                <TouchableOpacity style={styles.searchButton}>
-                  <Icon name="search" size={24} color="#007BFF" />
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            {/* Lista de Postagens */}
+            <Header showSearch={true} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
             <Text style={styles.sectionTitle}>Postagens</Text>
             <View style={styles.postsContainer}>
               {posts.map((post) => (
-                <TouchableOpacity key={post.id} style={styles.smallCard} onPress={() => openPostDetails(post)}>
-                  <Image style={styles.smallCardImage} source={post.image} />
-                  <Text style={styles.smallCardDescription}>{post.description}</Text>
-                  <View style={styles.cardTags}>
-                    {post.tags.map((tag, index) => (
-                      <View key={index} style={styles.tag}>
-                        <Text style={styles.tagText}>{tag}</Text>
-                      </View>
-                    ))}
-                  </View>
-                </TouchableOpacity>
+                <PostCard key={post.id} post={post} onPress={() => openPostDetails(post)} />
               ))}
             </View>
           </ScrollView>
@@ -367,45 +266,11 @@ export default function App() {
       case 'Propostas':
         return (
           <ScrollView style={styles.container}>
-            {/* Menu Superior */}
-            <Image
-              source={require('./assets/logoBlakv2.png')} // Mock da logo
-              style={styles.logoPaginas}
-            />
-            <View style={styles.topMenu}>
-              <View style={styles.searchContainer}>
-                <TextInput
-                  style={styles.searchInput}
-                  placeholder="Buscar eventos..."
-                  placeholderTextColor="#999"
-                  value={searchQuery}
-                  onChangeText={setSearchQuery}
-                />
-                <TouchableOpacity style={styles.searchButton}>
-                  <Icon name="search" size={24} color="#007BFF" />
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            {/* Lista de Propostas */}
+            <Header showSearch={true} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
             <Text style={styles.sectionTitle}>Eventos</Text>
             <View style={styles.eventsContainer}>
               {profileData.events.map((event) => (
-                <TouchableOpacity key={event.id} style={styles.eventCard} onPress={() => openPostDetails(event)}>
-                  <Image source={event.image} style={styles.eventImage} />
-                  <View style={styles.eventDetails}>
-                    <Text style={styles.eventTitle}>{event.title}</Text>
-                    <Text style={styles.eventDate}>{event.date}</Text>
-                    <Text style={styles.eventLocation}>{event.location}</Text>
-                    <View style={styles.cardTags2}>
-                      {event.tags.map((tag, index) => (
-                        <View key={index} style={styles.tag}>
-                          <Text style={styles.tagText}>{tag}</Text>
-                        </View>
-                      ))}
-                    </View>
-                  </View>
-                </TouchableOpacity>
+                <EventCard key={event.id} event={event} onPress={() => openPostDetails(event)} />
               ))}
             </View>
           </ScrollView>
@@ -413,16 +278,10 @@ export default function App() {
       case 'Perfil':
         return (
           <ScrollView style={styles.container}>
-            {/* Cabeçalho do Perfil */}
             <View style={styles.profileHeader}>
-              <Image
-                source={profileData.profileImage}
-                style={styles.profileImage}
-              />
+              <Image source={profileData.profileImage} style={styles.profileImage} />
               <Text style={styles.profileName}>{profileData.name}</Text>
               <Text style={styles.profileBio}>{profileData.bio}</Text>
-
-              {/* Redes Sociais */}
               <View style={styles.socialLinksContainer}>
                 {profileData.socialLinks.map((link) => (
                   <TouchableOpacity key={link.id} style={styles.socialLinkButton}>
@@ -432,48 +291,18 @@ export default function App() {
                 ))}
               </View>
             </View>
-
-            {/* Seção de Eventos Criados */}
             <Text style={styles.sectionTitle}>Eventos Criados</Text>
             <View style={styles.eventsContainer}>
               {profileData.events.map((event) => (
-                <TouchableOpacity key={event.id} style={styles.eventCard} onPress={() => openPostDetails(event)}>
-                  <Image source={event.image} style={styles.eventImage} />
-                  <View style={styles.eventDetails}>
-                    <Text style={styles.eventTitle}>{event.title}</Text>
-                    <Text style={styles.eventDate}>{event.date}</Text>
-                    <Text style={styles.eventLocation}>{event.location}</Text>
-                    <View style={styles.cardTags2}>
-                      {event.tags.map((tag, index) => (
-                        <View key={index} style={styles.tag}>
-                          <Text style={styles.tagText}>{tag}</Text>
-                        </View>
-                      ))}
-                    </View>
-                  </View>
-                </TouchableOpacity>
+                <EventCard key={event.id} event={event} onPress={() => openPostDetails(event)} />
               ))}
             </View>
-
-            {/* Seção de Meus Posts */}
             <Text style={styles.sectionTitle}>Meus posts</Text>
             <View style={styles.postsContainer}>
               {posts.map((post) => (
-                <TouchableOpacity key={post.id} style={styles.smallCard} onPress={() => openPostDetails(post)}>
-                  <Image style={styles.smallCardImage} source={post.image} />
-                  <Text style={styles.smallCardDescription}>{post.description}</Text>
-                  <View style={styles.cardTags}>
-                    {post.tags.map((tag, index) => (
-                      <View key={index} style={styles.tag}>
-                        <Text style={styles.tagText}>{tag}</Text>
-                      </View>
-                    ))}
-                  </View>
-                </TouchableOpacity>
+                <PostCard key={post.id} post={post} onPress={() => openPostDetails(post)} />
               ))}
             </View>
-
-            {/* Seção de Avaliações */}
             <Text style={styles.sectionTitle}>Avaliações</Text>
             <View style={styles.reviewsContainer}>
               {profileData.reviews.map((review) => (
@@ -489,27 +318,7 @@ export default function App() {
       case 'Mensagens':
         return (
           <ScrollView style={styles.container}>
-            {/* Menu Superior */}
-            <Image
-              source={require('./assets/logoBlakv2.png')} // Mock da logo
-              style={styles.logoPaginas}
-            />
-            <View style={styles.topMenu}>
-              <View style={styles.searchContainer}>
-                <TextInput
-                  style={styles.searchInput}
-                  placeholder="Buscar mensagens..."
-                  placeholderTextColor="#999"
-                  value={searchQuery}
-                  onChangeText={setSearchQuery}
-                />
-                <TouchableOpacity style={styles.searchButton}>
-                  <Icon name="search" size={24} color="#007BFF" />
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            {/* Lista de Mensagens */}
+            <Header showSearch={true} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
             <Text style={styles.sectionTitle}>Mensagens</Text>
             <View style={styles.messagesContainer}>
               {messages.map((message) => (
@@ -527,14 +336,11 @@ export default function App() {
     }
   };
 
-  // Se o usuário não estiver logado, exibe a tela de login
+  // Tela de login
   if (!isLoggedIn) {
     return (
       <View style={styles.loginContainer}>
-        <Image
-          source={require('./assets/logoBlakv2.png')} // Mock da logo
-          style={styles.logo}
-        />
+        <Image source={require('./assets/logoBlakv2.png')} style={styles.logo} />
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -557,141 +363,20 @@ export default function App() {
     );
   }
 
-  // Se a splash screen estiver visível, exibe a splash screen
+  // Splash screen
   if (showSplash) {
     return (
       <View style={styles.splashContainer}>
-        <Image
-          source={require('./assets/logoBlack.png')} // Imagem da splash screen
-          style={styles.splashImage}
-        />
+        <Image source={require('./assets/logoBlack.png')} style={styles.splashImage} />
       </View>
     );
   }
 
   return (
     <View style={styles.fullContainer}>
-      {/* Conteúdo principal */}
       {renderContent()}
 
-      {/* Modal para detalhes do evento */}
-      <Modal
-        visible={modalVisible}
-        transparent={true}
-        animationType="none"
-        onRequestClose={closePostDetails}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            {selectedPost && (
-              <>
-                <Image source={selectedPost.image} style={styles.modalImage} />
-                <Text style={styles.modalTitle}>{selectedPost.title || selectedPost.description}</Text>
-                <Text style={styles.modalDetails}>{selectedPost.details}</Text>
-                <Text style={styles.modalDetails}>{selectedPost.date}</Text>
-                <Text style={styles.modalDetails}>{selectedPost.location}</Text>
-                <TouchableOpacity style={styles.closeButton} onPress={closePostDetails}>
-                  <Text style={styles.closeButtonText}>Fechar</Text>
-                </TouchableOpacity>
-              </>
-            )}
-          </View>
-        </View>
-      </Modal>
-
-      {/* Modal para detalhes da mensagem */}
-      <Modal
-        visible={messageModalVisible}
-        transparent={true}
-        animationType="none"
-        onRequestClose={closeMessageDetails}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            {selectedMessage && (
-              <>
-                <Text style={styles.modalTitle}>{selectedMessage.sender}</Text>
-                <Text style={styles.modalDetails}>{selectedMessage.message}</Text>
-                <Text style={styles.modalDetails}>{selectedMessage.timestamp}</Text>
-                <TouchableOpacity style={styles.closeButton} onPress={closeMessageDetails}>
-                  <Text style={styles.closeButtonText}>Fechar</Text>
-                </TouchableOpacity>
-              </>
-            )}
-          </View>
-        </View>
-      </Modal>
-
-      {/* Modal para criar novo post/evento */}
-      <Modal
-        visible={createModalVisible}
-        transparent={true}
-        animationType="none"
-        onRequestClose={() => setCreateModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Criar Novo Post/Evento</Text>
-
-            {/* Radio Buttons para escolher entre Post ou Evento */}
-            <View style={styles.radioContainer}>
-              <View style={styles.radioButton}>
-                <RadioButton
-                  value="post"
-                  status={contentType === 'post' ? 'checked' : 'unchecked'}
-                  onPress={() => setContentType('post')}
-                />
-                <Text style={styles.radioLabel}>Postagem</Text>
-              </View>
-              <View style={styles.radioButton}>
-                <RadioButton
-                  value="event"
-                  status={contentType === 'event' ? 'checked' : 'unchecked'}
-                  onPress={() => setContentType('event')}
-                />
-                <Text style={styles.radioLabel}>Evento</Text>
-              </View>
-            </View>
-
-            <TextInput
-              style={styles.input}
-              placeholder={contentType === 'post' ? "Descrição" : "Título do Evento"}
-              placeholderTextColor="#999"
-              value={newDescription}
-              onChangeText={setNewDescription}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Data (DD/MM/AAAA)"
-              placeholderTextColor="#999"
-              value={newDate}
-              onChangeText={setNewDate}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Localização"
-              placeholderTextColor="#999"
-              value={newLocation}
-              onChangeText={setNewLocation}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Tag (ex: Banda, Rock)"
-              placeholderTextColor="#999"
-              value={newTag}
-              onChangeText={setNewTag}
-            />
-            <TouchableOpacity style={styles.createButton} onPress={handleCreatePost}>
-              <Text style={styles.createButtonText}>Criar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.closeButton} onPress={() => setCreateModalVisible(false)}>
-              <Text style={styles.closeButtonText}>Cancelar</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-
-      {/* Botão Flutuante */}
+      {/* Botão flutuante para adicionar posts/eventos */}
       {currentScreen !== 'Perfil' && currentScreen !== 'Mensagens' && (
         <TouchableOpacity
           style={styles.floatingButton}
@@ -701,7 +386,7 @@ export default function App() {
         </TouchableOpacity>
       )}
 
-      {/* Barra de Menu Inferior com Ícones do Material Design */}
+      {/* Menu inferior */}
       <View style={styles.bottomMenu}>
         <TouchableOpacity
           style={styles.menuButton}
@@ -773,421 +458,38 @@ export default function App() {
           </Text>
         </TouchableOpacity>
       </View>
+
+      {/* Modal para detalhes do post/evento */}
+      <Modal
+        visible={modalVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={closePostDetails}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            {selectedPost && (
+              <>
+                <Image source={selectedPost.image} style={styles.modalImage} />
+                <Text style={styles.modalTitle}>{selectedPost.title || selectedPost.description}</Text>
+                <Text style={styles.modalDetails}>{selectedPost.details}</Text>
+                <Text style={styles.modalDetails}>{selectedPost.date}</Text>
+                <Text style={styles.modalDetails}>{selectedPost.location}</Text>
+                <TouchableOpacity style={styles.closeButton} onPress={closePostDetails}>
+                  <Text style={styles.closeButtonText}>Fechar</Text>
+                </TouchableOpacity>
+              </>
+            )}
+          </View>
+        </View>
+      </Modal>
+
+      {/* Modal para criar novo post/evento */}
+      <CreatePostModal
+        visible={createModalVisible}
+        onClose={() => setCreateModalVisible(false)}
+        onCreate={handleCreatePost}
+      />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  // Estilos da tela de login
-  loginContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
-    padding: 20,
-  },
-  input: {
-    width: '80%',
-    height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 15,
-    backgroundColor: '#fff',
-  },
-  loginButton: {
-    width: '80%',
-    height: 40,
-    backgroundColor: '#007BFF',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 5,
-  },
-  loginButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-
-  // Estilos da splash screen
-  splashContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-  },
-  splashImage: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'contain',
-  },
-
-  // Estilos da tela do artista
-  fullContainer: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-    padding: 16,
-  },
-  topMenu: {
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  logo: {
-    width: '85%',
-    height: 85,
-    marginBottom: 56,
-    marginTop: 70,
-  },
-  logoPaginas: {
-    width: '30%',
-    height: 30,
-    marginBottom: 20,
-    marginTop: 70,
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    width: '100%',
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  searchInput: {
-    flex: 1,
-    height: 40,
-    color: '#333',
-  },
-  searchButton: {
-    padding: 10,
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 16,
-  },
-  highlightsContainer: {
-    paddingBottom: 16,
-  },
-  highlightCard: {
-    width: 200,
-    marginRight: 16,
-    borderRadius: 10,
-    backgroundColor: '#fff',
-    overflow: 'hidden',
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  highlightImage: {
-    width: '100%',
-    height: 120,
-  },
-  highlightDescription: {
-    padding: 8,
-    fontSize: 14,
-    color: '#333',
-  },
-  eventsContainer: {
-    marginBottom: 16,
-  },
-  eventCard: {
-    width: '100%',
-    borderRadius: 10,
-    backgroundColor: '#fff',
-    overflow: 'hidden',
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    marginBottom: 16,
-  },
-  eventImage: {
-    width: '100%',
-    height: 150,
-  },
-  eventDetails: {
-    padding: 16,
-  },
-  eventTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 8,
-  },
-  eventDate: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 4,
-  },
-  eventLocation: {
-    fontSize: 14,
-    color: '#666',
-  },
-  postsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  smallCard: {
-    width: '48%',
-    borderRadius: 10,
-    backgroundColor: '#fff',
-    overflow: 'hidden',
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    marginBottom: 16,
-  },
-  smallCardImage: {
-    width: '100%',
-    height: 100,
-  },
-  smallCardDescription: {
-    padding: 8,
-    fontSize: 14,
-    color: '#333',
-  },
-  cardTags: {
-    top: 3,
-    right: 3,
-    marginBottom: 10,
-    display: 'flex',
-    flexDirection: 'row',
-  },
-  cardTags2: {
-    position: 'absolute',
-    top: 25,
-    right: 10,
-    alignItems: 'flex-end',
-  },
-  tag: {
-    backgroundColor: '#FF0062',
-    borderRadius: 12,
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    marginBottom: 2,
-    marginLeft: 10,
-  },
-  tagText: {
-    fontSize: 12,
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  profileHeader: {
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  profileImage: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    marginBottom: 16,
-    marginTop: 56,
-  },
-  profileName: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 8,
-  },
-  profileBio: {
-    fontSize: 14,
-    color: '#666',
-    textAlign: 'center',
-    marginBottom: 16,
-  },
-  socialLinksContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  socialLinkButton: {
-    alignItems: 'center',
-    marginHorizontal: 8,
-  },
-  socialLinkLabel: {
-    fontSize: 12,
-    color: '#666',
-  },
-  reviewsContainer: {
-    marginBottom: 24,
-  },
-  reviewCard: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 16,
-    marginBottom: 16,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  reviewAuthor: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 8,
-  },
-  reviewRating: {
-    fontSize: 14,
-    color: '#FFD700',
-    marginBottom: 8,
-  },
-  reviewComment: {
-    fontSize: 14,
-    color: '#666',
-  },
-  modalOverlay: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#fff',
-    padding: 20,
-    alignItems: 'center',
-  },
-  modalImage: {
-    width: '100%',
-    height: 200,
-    borderRadius: 10,
-    marginBottom: 16,
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 8,
-  },
-  modalDetails: {
-    fontSize: 14,
-    color: '#666',
-    textAlign: 'center',
-    marginBottom: 16,
-  },
-  closeButton: {
-    padding: 10,
-    backgroundColor: '#FF0062',
-    borderRadius: 5,
-    marginTop: 16,
-  },
-  closeButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  createButton: {
-    padding: 10,
-    backgroundColor: '#007BFF',
-    borderRadius: 5,
-    marginTop: 16,
-    alignItems: 'center',
-  },
-  createButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  radioContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
-    marginBottom: 16,
-  },
-  radioButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  radioLabel: {
-    marginLeft: 8,
-    fontSize: 16,
-    color: '#333',
-  },
-  bottomMenu: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    borderTopWidth: 1,
-    borderTopColor: '#e0e0e0',
-    paddingVertical: 10,
-  },
-  menuButton: {
-    alignItems: 'center',
-  },
-  menuButtonText: {
-    fontSize: 12,
-    color: '#666',
-    marginTop: 4,
-  },
-  menuButtonActive: {
-    fontSize: 12,
-    color: '#007BFF',
-    fontWeight: 'bold',
-    marginTop: 4,
-  },
-  floatingButton: {
-    position: 'absolute',
-    bottom: 80,
-    right: 20,
-    backgroundColor: '#007BFF',
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    justifyContent: 'center',
-    alignItems: 'center',
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-  },
-  messagesContainer: {
-    marginBottom: 16,
-  },
-  messageCard: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 16,
-    marginBottom: 16,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  messageSender: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 8,
-  },
-  messageText: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 8,
-  },
-  messageTimestamp: {
-    fontSize: 12,
-    color: '#999',
-  },
-});
