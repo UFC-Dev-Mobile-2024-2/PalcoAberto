@@ -70,7 +70,7 @@ export default function App() {
     {
       id: 3,
       type: 'post',
-      image: require('./assets/cd.JPG'),
+      image: require('./assets/cd.jpg'),
       description: 'Gorilla Glue! A nova banda do momento.',
       details: 'Conheça de perto a mais nova campeã do reality Battle of the Bands.',
       date: '07/02/2024',
@@ -80,7 +80,7 @@ export default function App() {
     {
       id: 4,
       type: 'post',
-      image: require('./assets/bc.JPG'),
+      image: require('./assets/bc.jpg'),
       description: 'Gravação do novo albúm.',
       details: 'Escute nossas novas faixas!       Disponível em todas as plataformas digitais..',
       date: '05/07/2022',
